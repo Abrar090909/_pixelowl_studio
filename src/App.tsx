@@ -1597,67 +1597,6 @@ const ContactPage = () => {
 };
 
 
-const CustomCursor = () => {
-  const [pos, setPos] = useState({ x: -100, y: -100 });
-  const [ring, setRing] = useState({ x: -100, y: -100 });
-  const [hovered, setHovered] = useState(false);
-  const posRef = useRef({ x: -100, y: -100 });
-
-  useEffect(() => {
-    const move = (e: MouseEvent) => {
-      posRef.current = { x: e.clientX, y: e.clientY };
-      setPos({ x: e.clientX, y: e.clientY });
-    };
-    const onEnter = () => setHovered(true);
-    const onLeave = () => setHovered(false);
-
-    document.addEventListener('mousemove', move);
-    document.addEventListener('mouseover', (e) => {
-      if ((e.target as HTMLElement).closest('a, button')) setHovered(true);
-      else setHovered(false);
-    });
-
-    let rx = -100, ry = -100;
-    let rafId: number;
-    const animate = () => {
-      rx += (posRef.current.x - rx) * 0.12;
-      ry += (posRef.current.y - ry) * 0.12;
-      setRing({ x: rx, y: ry });
-      rafId = requestAnimationFrame(animate);
-    };
-    rafId = requestAnimationFrame(animate);
-
-    return () => {
-      document.removeEventListener('mousemove', move);
-      cancelAnimationFrame(rafId);
-    };
-  }, []);
-
-  return (
-    <div className="hidden md:block">
-      <div
-        className="fixed pointer-events-none z-[99999] rounded-full"
-        style={{
-          width: 6, height: 6,
-          background: 'white',
-          left: pos.x - 3, top: pos.y - 3,
-        }}
-      />
-      <div
-        className="fixed pointer-events-none z-[99998] rounded-full border"
-        style={{
-          width: hovered ? 52 : 30,
-          height: hovered ? 52 : 30,
-          left: ring.x - (hovered ? 26 : 15),
-          top: ring.y - (hovered ? 26 : 15),
-          transition: 'width 0.25s ease, height 0.25s ease',
-          borderColor: hovered ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.2)',
-        }}
-      />
-    </div>
-  );
-};
-
 const HomePage = () => (
   <>
     <Hero />
@@ -1700,7 +1639,6 @@ export default function App() {
   return (
     <Router>
       <main className="bg-transparent text-white selection:bg-white selection:text-black">
-        <CustomCursor />
         <Navbar />
         <CookieConsent />
         <Routes>
