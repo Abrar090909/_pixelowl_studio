@@ -1634,7 +1634,7 @@ const CustomCursor = () => {
   }, []);
 
   return (
-    <>
+    <div className="hidden md:block">
       <div
         className="fixed pointer-events-none z-[99999] rounded-full"
         style={{
@@ -1654,7 +1654,7 @@ const CustomCursor = () => {
           borderColor: hovered ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.2)',
         }}
       />
-    </>
+    </div>
   );
 };
 
