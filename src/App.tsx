@@ -11,7 +11,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-import { ArrowUpRight, ArrowRight, Star, Menu, Check, Plus, Minus, X, ArrowLeft, ArrowUp, Mail, MapPin, Phone, Instagram, Twitter,  Linkedin,
+import { ArrowUpRight, ArrowRight, Star, Menu, Check, Plus, Minus, X, ArrowLeft, ArrowUp, ArrowDown, Mail, MapPin, Phone, Instagram, Twitter,  Linkedin,
   Search,
   Sun,
   Battery,
@@ -24,7 +24,6 @@ import { ArrowUpRight, ArrowRight, Star, Menu, Check, Plus, Minus, X, ArrowLeft,
 } from 'lucide-react';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 import FlowingMenu from './components/FlowingMenu';
-import DarkVeil from './components/DarkVeil';
 import StarBorder from './components/StarBorder';
 
 import rostraImg from './assets/work/rostra.png';
@@ -38,7 +37,9 @@ import webDevImg from './assets/services/web_dev.png';
 import brandingImg from './assets/services/branding.png';
 import strategyImg from './assets/services/strategy.png';
 import heroBgImg from './assets/hero-bg.png';
-
+import heroOwlBgImg from './assets/hero_owl_mountains_backwards.png';
+import mountainValleyBgImg from './assets/mountain_valley_hero_bg_misty.png';
+import travelerOwlLeftBgImg from './assets/traveler_owl_left_mountain_valley_sunrise_hero_bg.png';
 import solutionCreativeImg from './assets/redesign/solution_creative.png';
 import solutionTechImg from './assets/redesign/solution_tech.png';
 import solutionGrowthImg from './assets/redesign/solution_growth.png';
@@ -65,6 +66,33 @@ const Asterisk = ({ className }: { className?: string }) => (
     <line x1="6.34" y1="17.66" x2="17.66" y2="6.34" />
   </svg>
 );
+
+const RevealText = ({ text, delay = 0, className = "" }: { text: string, delay?: number, className?: string }) => {
+  return (
+    <span className={`inline-flex flex-wrap ${className}`}>
+      {text.split(" ").map((word, wordIdx) => (
+        <span key={wordIdx} className="inline-flex overflow-hidden pb-4 -mb-4 mr-[0.25em] last:mr-0 pt-2 -mt-2">
+          {word.split("").map((char, charIdx) => (
+             <motion.span
+               key={charIdx}
+               initial={{ y: "110%", rotateZ: 5 }}
+               whileInView={{ y: 0, rotateZ: 0 }}
+               viewport={{ once: true, margin: "-50px" }}
+               transition={{
+                 duration: 0.8,
+                 ease: [0.16, 1, 0.3, 1],
+                 delay: delay + (wordIdx * 0.1) + (charIdx * 0.02)
+               }}
+               className="origin-bottom-left inline-block"
+             >
+               {char}
+             </motion.span>
+          ))}
+        </span>
+      ))}
+    </span>
+  );
+};
 
 const PROJECTS = [
   {
@@ -99,6 +127,12 @@ const PROJECTS = [
     year: "2024",
     link: "https://toolino-3cf4c.web.app/"
   }
+];
+
+const HERO_BRANDS = [
+  { name: "Orvion", image: orvionImg },
+  { name: "Nexis", image: nexisImg },
+  { name: "Toolino", image: toolinoImg }
 ];
 
 
@@ -152,184 +186,251 @@ const FAQS = [
   }
 ];
 
-const Navbar = ({ mobileMenuOpen, setMobileMenuOpen }: { mobileMenuOpen: boolean; setMobileMenuOpen: (o: boolean) => void }) => {
+const ContactForm = () => {
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus('submitting');
+    const formData = new FormData(e.currentTarget);
+    formData.append("access_key", import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || "YOUR_ACCESS_KEY_HERE");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
+      const data = await response.json();
+      if (data.success) {
+        setStatus('success');
+      } else {
+        setStatus('error');
+      }
+    } catch (err) {
+      setStatus('error');
+    }
+  };
+
+  if (status === 'success') {
+    return (
+      <div className="text-center py-12">
+        <div className="w-20 h-20 bg-[#C8FF00]/20 rounded-full flex items-center justify-center mx-auto mb-8 border border-[#C8FF00]/50">
+          <Check size={40} className="text-[#C8FF00]" />
+        </div>
+        <h3 className="text-3xl font-medium uppercase tracking-tight mb-4">Message Sent!</h3>
+        <p className="text-white/40 font-light max-w-sm mx-auto">We've received your inquiry and will get back to you within 24 hours.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="space-y-2">
+        <label className="text-xs font-bold uppercase tracking-widest text-white/30 px-1">Your Name</label>
+        <input required type="text" name="name" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 focus:border-[#C8FF00]/30 outline-none transition-colors text-sm" placeholder="John Doe" />
+      </div>
+      <div className="space-y-2">
+        <label className="text-xs font-bold uppercase tracking-widest text-white/30 px-1">Email Address</label>
+        <input required type="email" name="email" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 focus:border-[#C8FF00]/30 outline-none transition-colors text-sm" placeholder="email@example.com" />
+      </div>
+      <div className="space-y-2">
+        <label className="text-xs font-bold uppercase tracking-widest text-white/30 px-1">Project Details</label>
+        <textarea required name="message" rows={4} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 focus:border-[#C8FF00]/30 outline-none transition-colors text-sm resize-none" placeholder="Tell us about your project..." />
+      </div>
+      {status === 'error' && (
+        <p className="text-red-400 text-xs font-medium">Something went wrong. Please try again.</p>
+      )}
+      <button
+        disabled={status === 'submitting'}
+        type="submit"
+        className="w-full py-4 bg-[#C8FF00] text-black rounded-xl font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 mt-4 hover:bg-white transition-all disabled:opacity-50"
+      >
+        {status === 'submitting' ? "Sending..." : <>Send Message <ArrowRight size={16} /></>}
+      </button>
+    </form>
+  );
+};
+
+const ContactModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="absolute inset-0 bg-black/90 backdrop-blur-xl"
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="relative w-full max-w-xl bg-neutral-900 border border-white/10 rounded-[2.5rem] p-8 md:p-12 overflow-hidden shadow-2xl"
+          >
+            <button onClick={onClose} className="absolute top-6 right-6 text-white/40 hover:text-white transition-colors">
+              <X size={24} />
+            </button>
+            <div className="mb-8">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-2 h-2 rounded-full bg-[#C8FF00] animate-pulse" />
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#C8FF00]">AVAILABLE FOR PROJECTS</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-medium tracking-tighter uppercase leading-none">Let's build<br />something great.</h2>
+              <p className="text-sm text-white/40 mt-4 leading-relaxed">Fill out the form below and we'll get back to you within 24 hours to schedule a free strategy session.</p>
+            </div>
+            <ContactForm />
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const Navbar = ({ onOpenContact }: { onOpenContact: () => void }) => {
   const [scrolled, setScrolled] = useState(false);
-  const location = useLocation();
-  const isHome = location.pathname === '/';
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { label: "Home", to: "/" },
-    { label: "About us", to: "/about" },
-    { label: "Services", to: "/services" }
-  ];
-
   return (
     <motion.nav
-      className={`fixed top-0 left-0 w-full flex justify-between items-center px-6 md:px-12 transition-all duration-500 z-9999 pointer-events-none ${!isHome || scrolled ? 'py-4 bg-black/90 backdrop-blur-2xl border-b border-white/10' : 'py-6 bg-transparent border-b border-transparent'}`}
+      className={`fixed top-0 left-0 w-full flex justify-between items-center px-6 md:px-16 transition-all duration-500 z-9999 ${scrolled ? 'py-4 bg-white/95 backdrop-blur-md shadow-sm' : 'py-8 bg-transparent'}`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
-      {/* Left */}
-      <div className="flex-1 flex justify-start pointer-events-auto">
-        <Link
-          to="/"
-          onClick={(e) => {
-            if (isHome) {
-              e.preventDefault();
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-          }}
-          className="flex items-center gap-3 group"
-        >
-          <img src={logoImg} alt="PixelOwl Logo" className="w-10 h-10 rounded-full border border-white/10 group-hover:scale-110 transition-all" />
-          <span className="text-xl font-medium tracking-tight text-white transition-colors" style={{ fontFamily: 'var(--font-space)' }}>PixelOwl</span>
-        </Link>
+      {/* Left - See Projects */}
+      <div 
+        className={`hidden md:flex flex-col items-start cursor-pointer transition-colors duration-500 ${scrolled ? 'text-black' : 'text-white'}`}
+        onClick={() => document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })}
+      >
+        <span className="text-sm font-semibold tracking-tight uppercase">See projects</span>
+        <span className={`text-[10px] uppercase tracking-widest font-bold opacity-50 ${scrolled ? 'text-black/60' : 'text-white/60'}`}>Portfolio</span>
       </div>
 
-      {/* Center - Links (Desktop Only) */}
-      <div className="hidden lg:flex items-center gap-8 px-8 py-3 pointer-events-auto">
-        {navLinks.map((link, i) => {
-          const isActive = location.pathname === link.to;
-          const isWhitePage = !isHome;
-          
-          let textColor;
-          if (isActive) {
-            textColor = isWhitePage ? 'text-white' : 'text-[#C8FF00]';
-          } else {
-            textColor = isWhitePage ? 'text-white/60 hover:text-white' : 'text-white/60 hover:text-[#C8FF00]';
-          }
-
-          return (
-            <Link key={i} to={link.to} className={`text-sm font-semibold transition-colors ${textColor}`}>{link.label}</Link>
-          );
-        })}
+      {/* Center - PIXELOWL */}
+      <div 
+        className={`absolute left-1/2 -translate-x-1/2 font-medium tracking-[0.6em] text-sm md:text-lg select-none cursor-pointer transition-colors duration-500 ${scrolled ? 'text-black' : 'text-white'}`}
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      >
+        PIXELOWL
       </div>
 
-      <div className="flex-1 flex justify-end items-center gap-6 pointer-events-auto">
-        <Link
-          to="/contact"
-          className="hidden lg:flex items-center gap-4 pl-6 pr-2 py-2 rounded-xl font-semibold transition-all group text-black"
-          style={{ background: 'var(--accent)', fontSize: '15px' }}
-        >
-          Get in touch
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-black text-[#C8FF00] relative overflow-hidden">
-            <ArrowRight size={16} className="absolute transition-transform duration-300 group-hover:translate-x-8" />
-            <ArrowRight size={16} className="absolute -translate-x-8 transition-transform duration-300 group-hover:translate-x-0" />
-          </div>
-        </Link>
+      {/* Right - Get in touch */}
+      <div className="hidden md:flex items-center">
         <button
-          className="lg:hidden p-2 transition-colors text-white"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          onClick={onOpenContact}
+          className={`flex items-center gap-3 pl-6 pr-2 py-2 rounded-xl font-bold transition-all group overflow-hidden ${scrolled ? 'bg-black text-white hover:bg-neutral-800' : 'bg-[#C8FF00] text-black hover:bg-white'}`}
         >
-          {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          <span className="text-[13px] uppercase tracking-widest">Get in touch</span>
+          <div className={`w-8 h-8 rounded-lg flex items-center justify-center relative overflow-hidden transition-colors ${scrolled ? 'bg-white text-black' : 'bg-black text-[#C8FF00]'}`}>
+            <ArrowUpRight size={16} className="absolute transition-transform duration-300 group-hover:translate-x-8 group-hover:-translate-y-8" />
+            <ArrowUpRight size={16} className="absolute -translate-x-8 translate-y-8 transition-transform duration-300 group-hover:translate-x-0 group-hover:translate-y-0" />
+          </div>
         </button>
       </div>
     </motion.nav>
   );
 };
 
-const Hero = () => (
+const Hero = ({ onOpenContact }: { onOpenContact: () => void }) => (
   <section
-    className="relative min-h-screen flex flex-col items-start px-6 md:px-16 pt-32 pb-8 md:pb-6 text-left overflow-hidden bg-center bg-cover bg-no-repeat"
-    style={{ backgroundImage: `url(${heroBgImg})` }}
+    className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden bg-[position:20%_center] md:bg-center bg-cover bg-no-repeat w-full"
+    style={{ backgroundImage: `url(${travelerOwlLeftBgImg})` }}
   >
-    {/* Dark overlay with bottom gradient for readability */}
+    {/* Dark overlay for readability */}
     <div className="absolute inset-0 bg-black/30 z-0 pointer-events-none"></div>
-    <div className="absolute inset-x-0 bottom-0 h-[60vh] bg-linear-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent z-0 pointer-events-none"></div>
-
-    <div className="absolute inset-0 z-0 opacity-30 mix-blend-overlay pointer-events-none">
-      <DarkVeil hueShift={0} noiseIntensity={0.05} scanlineIntensity={0.1} speed={1} scanlineFrequency={2} warpAmount={0.1} />
+    
+    {/* Top Navigation Overlay */}
+    <div className="absolute top-8 left-0 w-full px-6 md:px-16 flex justify-between items-center z-20 pointer-events-none opacity-0">
+      {/* Hidden legacy overlay to prevent layout shifts */}
     </div>
 
-    {/* Background Outline Text */}
-    <div className="absolute bottom-[-2%] md:bottom-[-5%] left-0 w-full overflow-hidden flex justify-center z-0 opacity-[0.15] pointer-events-none select-none">
-      <h1 className="text-[35vw] md:text-[25vw] font-bold tracking-tighter leading-none" style={{ WebkitTextStroke: '2px rgba(255,255,255,0.8)', color: 'transparent', fontFamily: 'var(--font-space)' }}>
-        PIXELOWL
-      </h1>
-    </div>
-
-    <div className="relative z-10 w-full max-w-7xl px-0 md:px-0 flex flex-col mt-auto pb-0 pointer-events-none">
-      <div
-        style={{ fontFamily: 'var(--font-space)', fontSize: 'clamp(44px, 12vw, 98px)', lineHeight: 1, fontWeight: 500, letterSpacing: '-2px' }}
-        className="tracking-tight mb-4 md:mb-6 text-left flex flex-col"
-      >
-        <motion.div
-           initial={{ opacity: 0, y: 30 }}
-           animate={{ opacity: 1, y: 0 }}
-           transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+    {/* Center Content */}
+    <div className="relative z-10 flex flex-col items-center max-w-6xl px-6 pointer-events-none">
+      {/* Badges */}
+      <div className="flex flex-wrap justify-center gap-3 mb-8">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="px-4 py-1.5 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-[10px] md:text-xs font-bold tracking-widest text-white uppercase"
         >
-          Digital agency
+          SAAS & AI STARTUPS
         </motion.div>
-        <motion.div
-           initial={{ opacity: 0, y: 30 }}
-           animate={{ opacity: 1, y: 0 }}
-           transition={{ duration: 0.8, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="px-4 py-1.5 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-[10px] md:text-xs font-bold tracking-widest text-white uppercase"
         >
-          that moves the
-        </motion.div>
-        <motion.div
-           initial={{ opacity: 0, y: 30 }}
-           animate={{ opacity: 1, y: 0 }}
-           transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <span style={{ color: 'var(--accent)', fontWeight: 600 }}>business forward</span>
+          DIGITAL PRODUCT DESIGN
         </motion.div>
       </div>
 
-      <motion.p
-        className="text-sm md:text-lg text-white max-w-2xl mb-4 md:mb-0 leading-relaxed font-medium text-left drop-shadow-md"
+      {/* Main Headline */}
+      <h1 
+        className="text-white text-center leading-[0.9] md:leading-[0.85] tracking-tight mb-12 select-none flex flex-col items-center"
+        style={{ 
+          fontFamily: 'var(--font-geist)', 
+          fontSize: 'clamp(48px, 12vw, 110px)', 
+          fontWeight: 500, 
+          letterSpacing: '-0.04em',
+          textTransform: 'uppercase'
+        }}
+      >
+        <RevealText text="WEB DESIGN" delay={0.1} />
+        <RevealText text="AGENCY FOR DIGITAL" delay={0.2} />
+        <RevealText text="BUSINESSES" delay={0.3} />
+      </h1>
+
+      {/* Bottom Logos */}
+      <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.65, ease: [0.16, 1, 0.3, 1] }}
-        style={{ fontFamily: 'var(--font-sans)' }}
+        transition={{ duration: 0.8, delay: 0.8 }}
+        className="flex flex-wrap justify-center items-center gap-6 md:gap-10 mt-4 max-w-4xl"
       >
-        At PixelOwl, we don't just build websites; we engineer comprehensive digital ecosystems designed to dominate your market. We blend cutting-edge technology, user-centric design principles, and data-driven growth strategies to maximize efficiency and long-term value. Join the shift toward high-performance digital presence, outpace your competition, and take absolute control of your brand's legacy today.
-      </motion.p>
+        {HERO_BRANDS.map((brand, i) => (
+          <div key={i} className="flex items-center gap-3">
+            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur-sm overflow-hidden shrink-0">
+               <img src={brand.image} alt={brand.name} className="w-full h-full object-cover scale-150" />
+            </div>
+            <div className="flex flex-col items-start">
+              <div className="flex items-center gap-1.5">
+                <span className="text-white font-bold text-sm tracking-tight">{brand.name}</span>
+                <span className="text-[8px] bg-[#C8FF00] text-black px-1 rounded font-black">LIVE</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </motion.div>
+
+      {/* Mobile-only Get In Touch Button */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.9 }}
+        className="mt-10 md:hidden flex justify-center w-full pointer-events-auto shrink-0"
+      >
+        <button
+          onClick={onOpenContact}
+          className="flex items-center gap-3 pl-8 pr-2 py-3 rounded-2xl font-bold transition-all group overflow-hidden bg-[#C8FF00] text-black hover:bg-white shadow-[0_0_20px_rgba(200,255,0,0.15)]"
+        >
+          <span className="text-sm uppercase tracking-widest font-black">Get in touch</span>
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center relative overflow-hidden transition-colors bg-black text-[#C8FF00]">
+            <ArrowUpRight size={20} className="absolute transition-transform duration-300 group-hover:translate-x-10 group-hover:-translate-y-10" />
+            <ArrowUpRight size={20} className="absolute -translate-x-10 translate-y-10 transition-transform duration-300 group-hover:translate-x-0 group-hover:translate-y-0" />
+          </div>
+        </button>
+      </motion.div>
     </div>
 
-    {/* Bottom Widgets */}
-    <motion.div 
-      className="relative md:absolute md:bottom-12 md:right-16 mt-6 md:mt-0 z-10 flex flex-col items-start md:items-end gap-4 pointer-events-auto w-full md:w-auto"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.8 }}
-    >
-      <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-        {/* Explore Button */}
-        <Link to="/contact" className="pl-6 pr-2 py-2 bg-white rounded-full flex items-center gap-4 group transition-colors hover:bg-neutral-200">
-          <span className="text-black font-semibold text-sm">Explore now</span>
-          <div className="w-10 h-10 rounded-full flex items-center justify-center text-black relative overflow-hidden" style={{ backgroundColor: 'var(--accent)' }}>
-            <ArrowRight size={20} className="absolute transition-transform duration-300 group-hover:translate-x-8" />
-            <ArrowRight size={20} className="absolute -translate-x-8 transition-transform duration-300 group-hover:translate-x-0" />
-          </div>
-        </Link>
-        
-        {/* Avatars */}
-        <div className="flex items-center gap-4">
-          <div className="flex -space-x-3">
-            {[1, 2, 3, 4].map((i) => (
-              <img
-                key={i}
-                src={`https://i.pravatar.cc/100?u=user${i}`}
-                alt="Reviewer"
-                className="w-12 h-12 rounded-full border-2 border-white object-cover"
-              />
-            ))}
-          </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-bold text-white leading-tight">25+ reviews</span>
-            <span className="text-sm font-bold leading-tight" style={{ color: 'var(--accent)' }}>4.96 of 5</span>
-          </div>
-        </div>
-      </div>
-    </motion.div>
   </section>
 );
 
@@ -422,8 +523,9 @@ const SolutionsSection = () => {
     <section className="bg-white py-24 md:py-32 px-6 md:px-16">
       <div className="max-w-7xl mx-auto text-center mb-20">
         <span className="text-sm font-semibold uppercase tracking-[0.2em] text-black font-bold">Our Services</span>
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight text-black mt-4 leading-tight">
-          Customized digital strategies<br />that fit your needs
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight text-black mt-4 leading-tight flex flex-col items-center">
+          <RevealText text="Customized digital strategies" delay={0.1} />
+          <RevealText text="that fit your needs" delay={0.2} />
         </h2>
         <p className="text-black mt-6 max-w-2xl mx-auto text-lg leading-relaxed font-medium">
           We don't believe in one-size-fits-all. Every project is a unique opportunity to innovate.
@@ -580,8 +682,8 @@ const SolutionsSection = () => {
             >
               <span className="text-black font-semibold text-base px-6 py-1.5">About us</span>
               <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center text-[#C8FF00] relative overflow-hidden">
-                <ArrowRight size={18} className="absolute transition-transform duration-300 group-hover:translate-x-10" />
-                <ArrowRight size={18} className="absolute -translate-x-10 transition-transform duration-300 group-hover:translate-x-0" />
+                <ArrowUpRight size={18} className="absolute transition-transform duration-300 group-hover:translate-x-10 group-hover:-translate-y-10" />
+                <ArrowUpRight size={18} className="absolute -translate-x-10 translate-y-10 transition-transform duration-300 group-hover:translate-x-0 group-hover:translate-y-0" />
               </div>
             </Link>
           </motion.div>
@@ -606,7 +708,9 @@ const CapabilitiesGrid = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-24">
           <span className="text-sm font-bold uppercase tracking-[0.2em] text-black">Our Capabilities</span>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-black mt-4">Built for performance</h2>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-black mt-4">
+            <RevealText text="Built for performance" delay={0.1} />
+          </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
@@ -653,14 +757,11 @@ const ServicesSection = () => {
         >
           Our Expertise
         </motion.span>
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight text-white leading-tight"
+        <h2
+          className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight text-white leading-tight flex flex-col items-center"
         >
-          Services we offer
-        </motion.h2>
+          <RevealText text="Services we offer" delay={0.1} />
+        </h2>
       </div>
 
       <div className="border-t border-white/10" style={{ position: 'relative' }}>
@@ -678,11 +779,14 @@ const ServicesSection = () => {
   );
 };
 const ProjectsSection = () => {
+  const [showAll, setShowAll] = useState(false);
+  const displayedProjects = showAll ? PROJECTS : PROJECTS.slice(0, 2);
+
   return (
-    <section id="work" className="bg-[#C8FF00] py-24 md:py-40 px-6 md:px-16 overflow-hidden">
+    <section id="work" className="bg-[#C8FF00] py-16 md:py-24 px-6 md:px-16 overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        {/* Neon Intro Header */}
-        <div className="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-12">
+        {/* Section Header */}
+        <div className="mb-16 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -692,72 +796,56 @@ const ProjectsSection = () => {
           >
             <div className="flex items-center gap-3 mb-8">
               <Zap size={18} className="text-black fill-black" />
-              <span className="text-sm font-bold uppercase text-black/90 tracking-widest">SELECTED WORK</span>
+              <span className="text-sm font-bold uppercase text-black/90 tracking-[0.35em]">CASE STUDIES</span>
             </div>
 
-            <h2 className="text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight text-black leading-[1.1]" style={{ fontFamily: 'var(--font-space)' }}>
-              Innovations in<br />
-              green technology<br />
-              for the future
+            <h2 className="text-5xl md:text-7xl lg:text-7xl font-medium tracking-tight text-black leading-[0.95] flex flex-col items-start" style={{ fontFamily: 'var(--font-geist)' }}>
+              <RevealText text="STRATEGIC DESIGN & DIGITAL" delay={0.1} />
+              <RevealText text="GROWTH FOR MODERN BRANDS" delay={0.2} />
             </h2>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
             className="max-w-md"
           >
-            <p className="text-black/80 text-lg font-medium mb-10 leading-relaxed">
-              We build digital solutions that not only look stunning but drive real environmental impact through optimized code and green infrastructure.
+            <p className="text-black font-semibold text-xl mb-10 leading-snug opacity-80">
+              We translate complex business challenges into intuitive digital products that resonate with global audiences and drive measurable scaling.
             </p>
-            <Link to="/contact" className="inline-flex items-center gap-4 bg-black rounded-xl py-4 pl-8 pr-3 group hover:scale-[1.02] transition-all">
-              <span className="text-white font-semibold text-sm">View all work</span>
-              <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-black relative overflow-hidden">
-                <ArrowRight size={16} className="absolute transition-transform duration-300 group-hover:translate-x-8" />
-                <ArrowRight size={16} className="absolute -translate-x-8 transition-transform duration-300 group-hover:translate-x-0" />
-              </div>
-            </Link>
           </motion.div>
         </div>
 
-        {/* Bento Grid Below */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-black border border-black">
-          {PROJECTS.map((project, index) => (
+        {/* Square Grid Projects */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-x-24 md:gap-y-20">
+          {displayedProjects.map((project, index) => (
             <motion.div
               key={project.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="bg-black p-8 md:p-10 flex flex-col group h-full transition-colors hover:bg-neutral-900 border border-black"
+              transition={{ duration: 1, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              viewport={{ once: true, margin: "-100px" }}
+              className="flex flex-col group"
             >
-              {/* Top Metadata */}
-              <div className="mb-10">
-                <div className="flex items-center gap-4 mb-4">
-                  <span className="flex items-center gap-1.5 text-[#C8FF00] font-medium text-sm">
-                    <span className="text-white/40">{"{"}</span>
-                    {project.category}
-                    <span className="text-white/40">{"}"}</span>
-                  </span>
-                  <span className="text-white/30 text-sm font-medium">5/31/24</span>
-                </div>
-                <h3 className="text-3xl md:text-3xl font-medium text-white mb-2" style={{ fontFamily: 'var(--font-space)' }}>
-                  {project.title}
-                </h3>
-                <p className="text-white/40 text-sm font-medium tracking-tight">
-                  Premium Web Design & Development
-                </p>
-              </div>
-
-              <div className="mt-auto relative w-full aspect-4/3 overflow-hidden rounded-3xl">
+              <div className="relative aspect-square overflow-hidden mb-10 shadow-2xl bg-black border border-black/5">
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-full object-cover opacity-100"
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                   referrerPolicy="no-referrer"
                 />
+                <div className="absolute inset-x-0 bottom-0 p-8 md:p-12 bg-linear-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end translate-y-6 group-hover:translate-y-0 transition-transform duration-500">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] px-3 py-1 bg-[#C8FF00] text-black rounded-full">
+                      {project.category}
+                    </span>
+                  </div>
+                  <h3 className="text-3xl md:text-4xl lg:text-5xl font-medium text-white tracking-tighter uppercase leading-none" style={{ fontFamily: 'var(--font-geist)' }}>
+                    {project.title}
+                  </h3>
+                </div>
                 <a
                   href={project.link}
                   target="_blank"
@@ -765,27 +853,63 @@ const ProjectsSection = () => {
                   className="absolute inset-0 z-10"
                 />
               </div>
+
+              <div className="flex justify-between items-start px-4">
+                <div className="max-w-xs">
+                  <p className="text-black/60 font-medium text-sm leading-relaxed">
+                    A comprehensive digital transformation focused on high-conversion UI and seamless backend integration.
+                  </p>
+                </div>
+                <div className="h-10 w-10 md:h-12 md:w-12 rounded-full border border-black/10 flex items-center justify-center group-hover:bg-black group-hover:text-[#C8FF00] transition-colors">
+                  <ArrowUpRight size={24} />
+                </div>
+              </div>
             </motion.div>
           ))}
 
-          {/* View All Card - Themed to Black/Neon */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="bg-black p-10 flex flex-col items-center justify-center text-center cursor-pointer group transition-colors hover:bg-neutral-950 border border-black lg:col-span-2"
-          >
-            <Link to="/contact" className="flex flex-col items-center gap-6">
-              <div className="w-20 h-20 rounded-full border border-[#C8FF00]/20 flex items-center justify-center text-[#C8FF00] transition-transform group-hover:scale-110 group-hover:bg-[#C8FF00] group-hover:text-black">
-                <ArrowUpRight size={40} />
-              </div>
-              <div>
-                <h3 className="text-2xl font-semibold text-white uppercase tracking-tight">View all projects</h3>
-                <p className="text-white/40 text-xs uppercase tracking-[0.2em] mt-2">Explore full portfolio</p>
-              </div>
-            </Link>
-          </motion.div>
+          {/* Toggle View All Button */}
+          {!showAll && PROJECTS.length > 2 && (
+            <motion.div
+               initial={{ opacity: 0, y: 20 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.8 }}
+               viewport={{ once: true }}
+               className="md:col-span-2 flex justify-center mt-12"
+            >
+               <button 
+                  onClick={() => setShowAll(true)}
+                  className="group flex flex-col items-center gap-6"
+               >
+                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border border-black/10 flex items-center justify-center transition-all group-hover:bg-black group-hover:text-[#C8FF00]">
+                    <Plus size={32} />
+                  </div>
+                  <span className="text-sm font-bold uppercase tracking-[0.4em] text-black/40 group-hover:text-black transition-colors">VIEW ALL PROJECTS</span>
+               </button>
+            </motion.div>
+          )}
+
+          {showAll && (
+            <motion.div
+               initial={{ opacity: 0, y: 20 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.8 }}
+               viewport={{ once: true }}
+               className="md:col-span-2 flex justify-center mt-12"
+            >
+               <button 
+                  onClick={() => {
+                    setShowAll(false);
+                    document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="group flex flex-col items-center gap-6"
+               >
+                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border border-black/10 flex items-center justify-center transition-all group-hover:bg-black group-hover:text-[#C8FF00]">
+                    <Minus size={32} />
+                  </div>
+                  <span className="text-sm font-bold uppercase tracking-[0.4em] text-black/40 group-hover:text-black transition-colors">SHOW LESS</span>
+               </button>
+            </motion.div>
+          )}
         </div>
       </div>
     </section>
@@ -850,8 +974,7 @@ const ProcessSection = () => {
   );
 };
 
-const PricingSection = () => {
-  const [selectedPlan, setSelectedPlan] = useState<any>(null);
+const PricingSection = ({ onOpenContact }: { onOpenContact: () => void }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const leftColRef = useRef<HTMLDivElement>(null);
 
@@ -897,10 +1020,10 @@ const PricingSection = () => {
       theme: 'dark',
       features: [
         { name: "Complex Web Applications", included: true },
-        { name: "E-commerce Integration", included: true },
         { name: "Advanced SEO & Analytics", included: true },
         { name: "Performance Tuning", included: true },
-        { name: "Priority Support", included: false }
+        { name: "Priority Support", included: true },
+        { name: "Custom Animations", included: true }
       ]
     },
     {
@@ -925,16 +1048,6 @@ const PricingSection = () => {
       ref={sectionRef}
       className="flex flex-col lg:flex-row items-start min-h-screen bg-white"
     >
-      <AnimatePresence>
-        {selectedPlan && (
-          <OrderModal
-            plan={selectedPlan}
-            isOpen={!!selectedPlan}
-            onClose={() => setSelectedPlan(null)}
-          />
-        )}
-      </AnimatePresence>
-
       {/* GSAP Pinned Left Column */}
       <div 
         ref={leftColRef} 
@@ -945,23 +1058,26 @@ const PricingSection = () => {
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-black">BEST PRICING PLANS</span>
         </div>
         
-        <h2 className="text-4xl md:text-5xl lg:text-5xl font-semibold tracking-tight text-black leading-tight mb-8">
-          Flexible<br />
-          best pricing<br />
-          plans for you
+        <h2 className="text-4xl md:text-5xl lg:text-5xl font-semibold tracking-tight text-black leading-tight mb-8 flex flex-col items-start">
+          <RevealText text="Flexible" />
+          <RevealText text="best pricing" delay={0.2} />
+          <RevealText text="plans for you" delay={0.4} />
         </h2>
         
         <p className="text-base text-black font-medium leading-relaxed mb-10 max-w-sm">
           Choose a plan that fits your needs today and scales effortlessly as your business grows. No hidden fees or complexity.
         </p>
 
-        <Link to="/contact" className="flex items-center justify-center gap-3 bg-[#C8FF00] rounded-xl p-1 group transition-all shadow-md shadow-[#C8FF00]/10 w-max hover:bg-[#b0e600]">
+        <button 
+          onClick={onOpenContact}
+          className="flex items-center justify-center gap-3 bg-[#C8FF00] rounded-xl p-1 group transition-all shadow-md shadow-[#C8FF00]/10 w-max hover:bg-[#b0e600]"
+        >
           <span className="text-black font-semibold text-sm px-5 py-1.5">Get in touch</span>
           <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center text-[#C8FF00] relative overflow-hidden">
-            <ArrowRight size={14} className="absolute transition-transform duration-300 group-hover:translate-x-8" />
-            <ArrowRight size={14} className="absolute -translate-x-8 transition-transform duration-300 group-hover:translate-x-0" />
+            <ArrowUpRight size={14} className="absolute transition-transform duration-300 group-hover:translate-x-8 group-hover:-translate-y-8" />
+            <ArrowUpRight size={14} className="absolute -translate-x-8 translate-y-8 transition-transform duration-300 group-hover:translate-x-0 group-hover:translate-y-0" />
           </div>
-        </Link>
+        </button>
       </div>
 
       {/* Scrollable Right Column */}
@@ -993,14 +1109,14 @@ const PricingSection = () => {
               </p>
 
               <button 
-                onClick={() => setSelectedPlan(plan)}
-                className={`w-full py-3.5 rounded-lg font-semibold text-base transition-all duration-500 transform hover:scale-[1.01] ${
+                onClick={onOpenContact}
+                className={`w-full py-4 rounded-xl font-bold uppercase tracking-widest text-xs transition-all duration-500 transform hover:scale-[1.01] ${
                   plan.theme === 'dark'
                   ? 'bg-[#C8FF00] text-black hover:bg-white'
                   : 'bg-black text-white hover:bg-[#C8FF00] hover:text-black'
                 }`}
               >
-                Purchase plan
+                Inquire now
               </button>
             </div>
 
@@ -1254,360 +1370,21 @@ const Footer = () => (
   </footer>
 );
 
-const PolicyPage = ({ title, content }: { title: string; content: React.ReactNode }) => {
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  return (
-    <div className="min-h-screen bg-white text-black pt-40 pb-20 px-6 md:px-16 relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 opacity-5">
-        <DarkVeil speed={0.5} noiseIntensity={0.02} scanlineIntensity={0.05} />
-      </div>
-
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-12 flex items-center gap-3 text-black/50 hover:text-black transition-colors group"
-      >
-        <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-        <span className="text-sm font-semibold uppercase tracking-widest">Go Back</span>
-      </button>
-
-      <div className="max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h1 className="text-5xl md:text-7xl font-medium tracking-tighter uppercase mb-16 leading-[0.9]">
-            {title}
-          </h1>
-          <div className="prose prose-lg max-w-none text-black/60 font-light leading-relaxed space-y-8">
-            {content}
-          </div>
-        </motion.div>
-      </div>
-    </div>
-  );
-};
-
-const TermsPage = () => (
-  <PolicyPage
-    title="Terms & Conditions"
-    content={
-      <>
-        <section>
-          <h2 className="text-2xl font-medium text-black uppercase tracking-tight mb-4">1. Engagement</h2>
-          <p>By using PixelOwl Studio's services, you enter into a binding agreement. We provide boutique web design and development services tailored to your project's unique requirements.</p>
-        </section>
-        <section>
-          <h2 className="text-2xl font-medium text-black uppercase tracking-tight mb-4">2. Project Scope & Revisions</h2>
-          <p>The specific deliverables and revision rounds are outlined in your project proposal. Any work outside this scope will be subject to a separate quote.</p>
-        </section>
-        <section>
-          <h2 className="text-2xl font-medium text-black uppercase tracking-tight mb-4">3. Payment Terms</h2>
-          <p>A non-refundable deposit is required to begin work. Final payment is due before the website's transfer or launch. Timely payments ensure the project stays on schedule.</p>
-        </section>
-        <section>
-          <h2 className="text-2xl font-medium text-black uppercase tracking-tight mb-4">4. Intellectual Property</h2>
-          <p>Ownership of the final design and code is transferred to the client upon full payment. PixelOwl Studio reserves the right to showcase the project in promotional materials.</p>
-        </section>
-        <section>
-          <h2 className="text-2xl font-medium text-black uppercase tracking-tight mb-4">5. Governing Law</h2>
-          <p>These terms are governed by the laws of India. Any disputes shall be resolved in the jurisdiction of PixelOwl Studio's operating location.</p>
-        </section>
-      </>
-    }
-  />
+const HomePage = ({ onOpenContact }: { onOpenContact: () => void }) => (
+   <>
+    <Hero onOpenContact={onOpenContact} />
+    <MarqueeStrip />
+    <ProjectsSection />
+    <SolutionsSection />
+    <AgencyStatsSection />
+    <ServicesSection />
+    <DeliveryMarquee />
+    <PricingSection onOpenContact={onOpenContact} />
+    <TestimonialsSection />
+    <Footer />
+  </>
 );
-
-const PrivacyPage = () => (
-  <PolicyPage
-    title="Privacy Policy"
-    content={
-      <>
-        <section>
-          <h2 className="text-2xl font-medium text-black uppercase tracking-tight mb-4">1. Data Collection</h2>
-          <p>We collect personal information (name, email, business details) that you voluntarily provide through our contact forms and order modals. This data is used solely to facilitate project discussions and service delivery.</p>
-        </section>
-        <section>
-          <h2 className="2xl font-medium text-black uppercase tracking-tight mb-4">2. Cookies & Tracking</h2>
-          <p>We use essential cookies for site functionality and to remember your privacy preferences. We do not use third-party tracking cookies without your explicit consent via our consent banner.</p>
-        </section>
-        <section>
-          <h2 className="text-2xl font-medium text-black uppercase tracking-tight mb-4">3. Third-Party Processing</h2>
-          <p>Your form submissions are processed through Web3Forms. They adhere to strict privacy standards and do not sell your data. We do not share your information with any other third parties.</p>
-        </section>
-        <section>
-          <h2 className="text-2xl font-medium text-black uppercase tracking-tight mb-4">4. Your Rights</h2>
-          <p>Under GDPR and other privacy laws, you have the right to access, correct, or request the deletion of your personal data. Contact us at pixelowl.agency@gmail.com to exercise these rights.</p>
-        </section>
-        <section>
-          <h2 className="text-2xl font-medium text-black uppercase tracking-tight mb-4">5. Security</h2>
-          <p>We implement industry-standard security measures to protect your data, including HTTPS encryption and secure form handling protocols.</p>
-        </section>
-      </>
-    }
-  />
-);
-
-const RefundPage = () => (
-  <PolicyPage
-    title="Refund Policy"
-    content={
-      <>
-        <section>
-          <h2 className="text-2xl font-medium text-black uppercase tracking-tight mb-4">1. Project Deposits</h2>
-          <p>A non-refundable deposit is required to secure your project slot. This deposit covers the initial research and strategy phase.</p>
-        </section>
-        <section>
-          <h2 className="text-2xl font-medium text-black uppercase tracking-tight mb-4">2. Milestone Payments</h2>
-          <p>Payments made upon the completion of project milestones are non-refundable as they represent work already completed and approved.</p>
-        </section>
-        <section>
-          <h2 className="text-2xl font-medium text-white uppercase tracking-tight mb-4">3. Project Cancellation</h2>
-          <p>If a project is cancelled by the client, no refunds will be issued for work already performed. Any outstanding balances for completed work must be paid.</p>
-        </section>
-        <section>
-          <h2 className="text-2xl font-medium text-white uppercase tracking-tight mb-4">4. Satisfaction Guarantee</h2>
-          <p>We strive for excellence. If you are not satisfied with the direction of the project, we will work with you to make it right within the scope of the original agreement.</p>
-        </section>
-      </>
-    }
-  />
-);
-
-const ContactForm = () => {
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setStatus('submitting');
-
-    const formData = new FormData(e.currentTarget);
-    formData.append("access_key", import.meta.env.VITE_WEB3FORMS_ACCESS_KEY);
-
-    try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formData
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        setStatus('success');
-      } else {
-        setStatus('error');
-      }
-    } catch (err) {
-      setStatus('error');
-    }
-  };
-
-  if (status === 'success') {
-    return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="text-center py-20"
-      >
-        <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-8 border border-emerald-500/50">
-          <Check size={40} className="text-emerald-500" />
-        </div>
-        <h3 className="text-3xl font-medium uppercase tracking-tight mb-4 text-black">Message Sent!</h3>
-        <p className="text-black/40 font-light max-w-sm mx-auto">We've received your inquiry and will get back to you within 24 hours.</p>
-        <button
-          onClick={() => setStatus('idle')}
-          className="mt-8 text-sm font-semibold uppercase tracking-widest text-black/60 hover:text-black transition-colors"
-        >
-          Send another message
-        </button>
-      </motion.div>
-    );
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-8">
-      <div className="space-y-2">
-        <label className="text-xs font-semibold uppercase tracking-widest text-black/30">Your Name</label>
-        <input required type="text" name="name" className="w-full bg-transparent border-b border-black/10 py-4 focus:border-black outline-none transition-colors text-xl font-light text-black placeholder:text-black/20" placeholder="John Doe" />
-      </div>
-      <div className="space-y-2">
-        <label className="text-xs font-semibold uppercase tracking-widest text-black/30">Email Address</label>
-        <input required type="email" name="email" className="w-full bg-transparent border-b border-black/10 py-4 focus:border-black outline-none transition-colors text-xl font-light text-black placeholder:text-black/20" placeholder="john@example.com" />
-      </div>
-      <div className="space-y-2">
-        <label className="text-xs font-semibold uppercase tracking-widest text-black/30">Project Details</label>
-        <textarea required name="message" rows={4} className="w-full bg-transparent border-b border-black/10 py-4 focus:border-black outline-none transition-colors text-xl font-light text-black placeholder:text-black/20 resize-none" placeholder="Tell me about your project..." />
-      </div>
-      {status === 'error' && (
-        <p className="text-red-400 text-sm font-medium">Something went wrong. Please try again or email us directly.</p>
-      )}
-
-      <button
-        disabled={status === 'submitting'}
-        type="submit"
-        className="w-full py-6 bg-white text-black rounded-2xl font-bold text-xl flex items-center justify-center gap-3 mt-12 hover:bg-neutral-200 transition-all disabled:opacity-50"
-      >
-        {status === 'submitting' ? (
-          <span className="flex items-center gap-2">
-            <span className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
-            Sending...
-          </span>
-        ) : (
-          <>Send Message <ArrowUpRight size={24} /></>
-        )}
-      </button>
-
-      {/* Honeypot field for spam protection */}
-      <input type="text" name="_honey" className="hidden" tabIndex={-1} autoComplete="off" />
-    </form>
-  );
-};
-
-const OrderModal = ({ plan, isOpen, onClose }: { plan: any; isOpen: boolean; onClose: () => void }) => {
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen]);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setStatus('submitting');
-
-    const formData = new FormData(e.currentTarget);
-    formData.append("access_key", import.meta.env.VITE_WEB3FORMS_ACCESS_KEY);
-    formData.append("service_tier", plan.title);
-
-    try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formData
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        setStatus('success');
-      } else {
-        setStatus('error');
-      }
-    } catch (err) {
-      setStatus('error');
-    }
-  };
-
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        onClick={onClose}
-        className="absolute inset-0 bg-black/90 backdrop-blur-xl"
-      />
-
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 10 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="relative w-full max-w-2xl bg-neutral-900 border border-white/10 rounded-3xl overflow-hidden max-h-[95vh] overflow-y-auto"
-      >
-        <button onClick={onClose} className="absolute top-5 right-5 text-white/40 hover:text-white z-10 transition-colors">
-          <X size={20} />
-        </button>
-
-        <div className="p-6 md:p-8">
-          {status === 'success' ? (
-            <div className="text-center py-12">
-              <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-8 border border-emerald-500/50">
-                <Check size={40} className="text-emerald-500" />
-              </div>
-              <h3 className="text-3xl font-medium uppercase tracking-tight mb-4">Request Sent!</h3>
-              <p className="text-white/40 font-light">We've received your project details for the {plan.title} plan. We'll reach out shortly.</p>
-              <button onClick={onClose} className="mt-8 px-8 py-4 bg-white text-black rounded-xl font-bold uppercase tracking-widest text-xs">Close</button>
-            </div>
-          ) : (
-            <>
-              <div className="mb-6">
-                <span className="text-[10px] font-semibold uppercase tracking-widest text-purple-500 mb-1 block">New Project</span>
-                <h2 className="text-3xl font-medium tracking-tighter uppercase">{plan.title} Package</h2>
-                <p className="text-sm text-white/40 mt-1">Fill in your details and let's get started.</p>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">Your Name</label>
-                    <input required type="text" name="name" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 focus:border-white/30 outline-none transition-colors text-sm" placeholder="Full Name" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">Email Address</label>
-                    <input required type="email" name="email" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 focus:border-white/30 outline-none transition-colors text-sm" placeholder="email@example.com" />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">Business Name</label>
-                    <input required type="text" name="business_name" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 focus:border-white/30 outline-none transition-colors text-sm" placeholder="Your Company" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">Business Type</label>
-                    <input required type="text" name="business_type" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 focus:border-white/30 outline-none transition-colors text-sm" placeholder="e.g. Agency, E-commerce" />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">Selected Service</label>
-                  <input readOnly value={plan.title} className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3.5 text-white/60 outline-none cursor-not-allowed text-sm" />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">Project Goals</label>
-                  <textarea required name="message" rows={2} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 focus:border-white/30 outline-none transition-colors resize-none text-sm" placeholder="What are we building?" />
-                </div>
-
-                {/* Honeypot field for spam protection */}
-                <input type="text" name="_honey" className="hidden" tabIndex={-1} autoComplete="off" />
-
-                {status === 'error' && (
-                  <p className="text-red-400 text-xs font-medium">Something went wrong. Please try again.</p>
-                )}
-
-
-
-                <button
-                  disabled={status === 'submitting'}
-                  type="submit"
-                  className="w-full py-5 bg-white text-black rounded-xl font-bold text-lg flex items-center justify-center gap-3 mt-4 hover:bg-neutral-200 transition-all disabled:opacity-50"
-                >
-                  {status === 'submitting' ? (
-                    <span className="flex items-center gap-2">
-                      <span className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
-                    </span>
-                  ) : (
-                    <>Submit Proposal <ArrowUpRight size={20} /></>
-                  )}
-                </button>
-              </form>
-            </>
-          )}
-        </div>
-      </motion.div>
-    </div>
-  );
-};
 
 const CookieConsent = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -1630,7 +1407,7 @@ const CookieConsent = () => {
     <motion.div
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="fixed bottom-8 left-8 right-8 md:left-auto md:right-8 md:w-[400px] z-[99999] bg-neutral-900 border border-white/10 p-8 rounded-3xl shadow-2xl backdrop-blur-xl"
+      className="fixed bottom-8 left-8 right-8 md:left-auto md:right-8 md:w-[400px] z-99999 bg-neutral-900 border border-white/10 p-8 rounded-3xl shadow-2xl backdrop-blur-xl"
     >
       <h4 className="text-lg font-medium uppercase tracking-tight mb-4 text-white">Privacy & Cookies</h4>
       <p className="text-sm text-white/40 font-light leading-relaxed mb-8">
@@ -1654,327 +1431,6 @@ const CookieConsent = () => {
   );
 };
 
-const NotFoundPage = () => {
-  const navigate = useNavigate();
-  return (
-    <div className="min-h-screen bg-white text-black flex items-center justify-center px-6 relative overflow-hidden text-center">
-      <div className="absolute inset-0 -z-10 opacity-5">
-        <DarkVeil speed={0.5} noiseIntensity={0.02} scanlineIntensity={0.05} />
-      </div>
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8 }}
-      >
-        <span className="text-xs font-semibold uppercase tracking-[0.3em] text-black/30">404 Error</span>
-        <h1 className="text-[120px] md:text-[200px] font-bold tracking-tighter leading-none my-8 opacity-5">404</h1>
-        <h2 className="text-4xl md:text-6xl font-medium tracking-tight uppercase mb-8">Page Not Found</h2>
-        <p className="text-black/40 font-light max-w-sm mx-auto mb-12">
-          The link you followed may be broken, or the page may have been removed.
-        </p>
-        <Link
-          to="/"
-          className="inline-flex items-center gap-3 px-8 py-5 bg-black text-white rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-neutral-800 transition-all"
-        >
-          Return Home <ArrowUpRight size={16} />
-        </Link>
-      </motion.div>
-    </div>
-  );
-};
-
-const AboutPage = () => {
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  return (
-    <div className="min-h-screen bg-white text-black pt-40 pb-20 px-6 md:px-16 relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 opacity-5">
-        <DarkVeil speed={0.5} noiseIntensity={0.02} scanlineIntensity={0.05} />
-      </div>
-
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-12 flex items-center gap-3 text-black/50 hover:text-black transition-colors group"
-      >
-        <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-        <span className="text-sm font-semibold uppercase tracking-widest">Go Back</span>
-      </button>
-
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <span className="text-sm font-semibold uppercase tracking-[0.3em] text-black/30">About the Studio</span>
-            <h1 className="text-6xl md:text-8xl font-medium tracking-tighter uppercase mt-6 leading-[0.9] text-black">
-              Crafting Digital<br />Masterpieces.
-            </h1>
-            <p className="text-xl md:text-2xl text-black/50 mt-12 font-light leading-relaxed">
-              A boutique design and development studio dedicated to helping ambitious businesses stand out online. Artistic vision meets technical precision — no middlemen, no handoffs.
-            </p>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-black/5"
-          >
-            <img
-              src={aboutStudioImg}
-              alt="About PixelOwl"
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
-            />
-
-          </motion.div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mt-40">
-          {[
-            { title: "Vision", desc: "To redefine the digital experience by creating websites that are not just tools, but extensions of a brand's soul." },
-            { title: "Mission", desc: "Empowering startups and established brands with high-performance, aesthetically superior web solutions." },
-            { title: "Values", desc: "Quality over quantity, transparency in every step, and a relentless pursuit of perfection." }
-          ].map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 + i * 0.1 }}
-            >
-              <h3 className="text-2xl font-medium uppercase tracking-tight mb-6">{item.title}</h3>
-              <p className="text-black/40 font-light leading-relaxed">
-                {item.desc}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const ContactPage = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  return (
-    <div className="min-h-screen bg-white text-black pt-40 pb-20 px-6 md:px-16 relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 opacity-5">
-        <DarkVeil speed={0.5} noiseIntensity={0.02} scanlineIntensity={0.05} />
-      </div>
-
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-12 flex items-center gap-3 text-black/50 hover:text-black transition-colors group"
-      >
-        <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-        <span className="text-sm font-semibold uppercase tracking-widest">Go Back</span>
-      </button>
-
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <span className="text-sm font-semibold uppercase tracking-[0.3em] text-black/30">Get In Touch</span>
-            <h1 className="text-6xl md:text-8xl font-medium tracking-tighter uppercase mt-6 leading-[0.9]">
-              Let's Start<br />Something Big.
-            </h1>
-
-            <div className="mt-16 space-y-12">
-              {[
-                { icon: Mail, label: "Email", value: "pixelowl.agency@gmail.com" },
-                { icon: MapPin, label: "Location", value: "India" }
-              ].map((item, i) => (
-                <div key={i} className="flex items-start gap-6">
-                  <div className="w-12 h-12 rounded-full bg-black/5 flex items-center justify-center text-black/60">
-                    <item.icon size={24} />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold uppercase tracking-widest text-black/30 mb-2">{item.label}</h4>
-                    <p className="text-2xl font-medium">{item.value}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="bg-neutral-50/80 backdrop-blur-sm border border-black/5 p-10 md:p-16 rounded-3xl"
-          >
-            <ContactForm />
-          </motion.div>
-        </div>
-
-        <div className="mt-20 flex gap-6">
-          <a href="https://www.instagram.com/pixelowl_digital?igsh=aWt2d3VmbnB0MGZt" target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full border border-black/10 flex items-center justify-center hover:bg-black hover:text-white transition-all text-black hover:text-white">
-            <Instagram size={24} />
-          </a>
-        </div>
-      </div>
-    </div>
-  );
-};
-const TeamPage = () => {
-  const navigate = useNavigate();
-  useEffect(() => { window.scrollTo(0, 0); }, []);
-
-  return (
-    <div className="min-h-screen bg-white text-black pt-40 pb-20 px-6 md:px-16 relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 opacity-5">
-        <DarkVeil speed={0.5} noiseIntensity={0.02} scanlineIntensity={0.05} />
-      </div>
-      <button onClick={() => navigate(-1)} className="mb-12 flex items-center gap-3 text-black/50 hover:text-black transition-colors group">
-        <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-        <span className="text-sm font-semibold uppercase tracking-widest">Go Back</span>
-      </button>
-
-      <div className="max-w-7xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-          <span className="text-sm font-semibold uppercase tracking-[0.3em] text-black/30">Behind the scenes</span>
-          <h1 className="text-6xl md:text-8xl font-medium tracking-tighter uppercase mt-6 leading-[0.9] mb-20 text-black">
-            Meet the<br />Team.
-          </h1>
-        </motion.div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {[
-            { name: "Alex Mercer", role: "CEO & Founder", image: team1Img },
-            { name: "Jordan Lee", role: "Lead Designer", image: team2Img },
-            { name: "Taylor Swift", role: "Senior Developer", image: team3Img },
-            { name: "Sam Wilson", role: "Digital Marketer", image: team4Img }
-          ].map((t, i) => (
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 * i }}>
-              <div className="aspect-square rounded-3xl overflow-hidden mb-6 filter grayscale hover:grayscale-0 transition-all duration-500 border border-black/5 underline-offset-4">
-                <img src={t.image} alt={t.name} className="w-full h-full object-cover" />
-              </div>
-              <h3 className="text-xl font-medium uppercase tracking-tight">{t.name}</h3>
-              <p className="text-black/40 text-sm mt-2 font-mono uppercase tracking-widest">{t.role}</p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const ServicesPage = () => {
-  const navigate = useNavigate();
-  useEffect(() => { window.scrollTo(0, 0); }, []);
-
-  return (
-    <div className="min-h-screen bg-white text-black pt-40 pb-20 px-6 md:px-16 relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 opacity-5">
-        <DarkVeil speed={0.5} noiseIntensity={0.02} scanlineIntensity={0.05} />
-      </div>
-      <button onClick={() => navigate(-1)} className="mb-12 flex items-center gap-3 text-black/50 hover:text-black transition-colors group">
-        <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-        <span className="text-sm font-semibold uppercase tracking-widest">Go Back</span>
-      </button>
-
-      <div className="max-w-7xl mx-auto mb-20 px-6 md:px-0">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-          <span className="text-sm font-semibold uppercase tracking-[0.3em] text-black/30">What we do</span>
-          <h1 className="text-6xl md:text-8xl font-medium tracking-tighter uppercase mt-6 leading-[0.9] text-black">
-            Our<br />Services.
-          </h1>
-        </motion.div>
-      </div>
-        
-      <div className="w-full border-t border-black/10 pt-12 relative">
-        <FlowingMenu
-          items={[
-            { link: '#', text: 'Web Design', image: serviceWebDesignImg },
-            { link: '#', text: 'Web Development', image: serviceWebDevImg },
-            { link: '#', text: 'E-commerce', image: serviceEcommerceImg },
-            { link: '#', text: 'SEO Optimization', image: serviceSeoImg },
-            { link: '#', text: 'Digital Marketing', image: serviceMarketingImg }
-          ]}
-          speed={15}
-          textColor="#000000"
-          bgColor="#ffffff"
-          marqueeBgColor="#C8FF00"
-          marqueeTextColor="#000000"
-          borderColor="rgba(0,0,0,0.1)"
-        />
-      </div>
-    </div>
-  );
-};
-
-const NewsPage = () => {
-  const navigate = useNavigate();
-  useEffect(() => { window.scrollTo(0, 0); }, []);
-
-  return (
-    <div className="min-h-screen bg-white text-black pt-40 pb-20 px-6 md:px-16 relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 opacity-5">
-        <DarkVeil speed={0.5} noiseIntensity={0.02} scanlineIntensity={0.05} />
-      </div>
-      <button onClick={() => navigate(-1)} className="mb-12 flex items-center gap-3 text-black/50 hover:text-black transition-colors group">
-        <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-        <span className="text-sm font-semibold uppercase tracking-widest">Go Back</span>
-      </button>
-
-      <div className="max-w-7xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-          <span className="text-sm font-semibold uppercase tracking-[0.3em] text-black/30">Company Updates</span>
-          <h1 className="text-6xl md:text-8xl font-medium tracking-tighter uppercase mt-6 leading-[0.9] mb-20 text-black">
-            Latest<br />News.
-          </h1>
-        </motion.div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {[1, 2, 3, 4].map((i) => (
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 * i }} className="group cursor-pointer">
-              <div className="aspect-video rounded-3xl overflow-hidden mb-6 bg-neutral-100 border border-black/5 relative flex items-center justify-center">
-                <span className="text-black/10 font-bold uppercase tracking-[0.4em] pointer-events-none transition-transform duration-500 group-hover:scale-110">Thumbnail {i}</span>
-              </div>
-              <div className="flex items-center gap-4 mb-4 text-xs font-mono text-black/40 uppercase tracking-widest">
-                <span>Press Release</span>
-                <span className="w-1 h-1 rounded-full bg-[#C8FF00]" />
-                <span>Mar 1{i}, 2026</span>
-              </div>
-              <h3 className="text-2xl md:text-3xl font-medium tracking-tighter uppercase leading-tight mb-4 group-hover:text-black/70 transition-colors">PixelOwl Launches New Web Platform For Tech Startups.</h3>
-              <p className="text-black/50 leading-relaxed font-light line-clamp-2">Our recent push towards scalable architectures brings robust, enterprise-level tooling to early-stage founders for a fraction of the cost.</p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-
-const HomePage = () => (
-   <>
-    <Hero />
-    <MarqueeStrip />
-    <ProjectsSection />
-    <SolutionsSection />
-    <AgencyStatsSection />
-    <ServicesSection />
-    <DeliveryMarquee />
-    <PricingSection />
-    <TestimonialsSection />
-    <Footer />
-  </>
-);
-
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -1983,80 +1439,17 @@ const ScrollToTop = () => {
   return null;
 };
 
-const MobileOverlayMenu = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
-  const location = useLocation();
-  const navLinks = [
-    { label: "Home", to: "/" },
-    { label: "About us", to: "/about" },
-    { label: "Services", to: "/services" },
-    { label: "Contact", to: "/contact" }
-  ];
-
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-3xl z-99998 pointer-events-auto"
-            onClick={onClose}
-          />
-          <motion.div
-            initial={{ y: "-100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "-100%" }}
-            transition={{ type: "spring", damping: 30, stiffness: 200 }}
-            className="fixed top-0 left-0 w-full bg-black z-99999 p-12 pt-40 flex flex-col items-center pointer-events-auto rounded-b-[40px] border-b border-white/5"
-          >
-            <button 
-              onClick={onClose}
-              className="absolute top-8 right-8 text-white/50 hover:text-white transition-colors"
-            >
-              <X size={32} />
-            </button>
-
-            <div className="flex flex-col items-center gap-10 w-full">
-              {navLinks.map((link, i) => {
-                const isActive = location.pathname === link.to;
-                return (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 * i + 0.3 }}
-                    className="w-full text-center"
-                  >
-                    <Link
-                      to={link.to}
-                      onClick={onClose}
-                      className={`text-5xl font-medium tracking-tight uppercase block transition-colors ${isActive ? 'text-[#C8FF00]' : 'text-white/40 hover:text-white'}`}
-                    >
-                      {link.label}
-                    </Link>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
-  );
-};
-
 export default function App() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   useEffect(() => {
-    if (mobileMenuOpen) {
+    if (isContactModalOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
     return () => { document.body.style.overflow = 'unset'; };
-  }, [mobileMenuOpen]);
+  }, [isContactModalOpen]);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -2074,9 +1467,7 @@ export default function App() {
       lenis.raf(time);
       requestAnimationFrame(raf);
     }
-
     requestAnimationFrame(raf);
-
     return () => {
       lenis.destroy();
     };
@@ -2086,21 +1477,10 @@ export default function App() {
     <Router>
       <main className="bg-transparent text-white selection:bg-white selection:text-black">
         <ScrollToTop />
-        <Navbar mobileMenuOpen={mobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} />
-        <MobileOverlayMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
+        <Navbar onOpenContact={() => setIsContactModalOpen(true)} />
+        <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} />
         <CookieConsent />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/team" element={<TeamPage />} />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/news" element={<NewsPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/terms" element={<TermsPage />} />
-          <Route path="/privacy" element={<PrivacyPage />} />
-          <Route path="/refund" element={<RefundPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+        <HomePage onOpenContact={() => setIsContactModalOpen(true)} />
       </main>
     </Router>
   );
