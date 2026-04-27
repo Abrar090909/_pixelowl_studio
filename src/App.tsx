@@ -39,7 +39,9 @@ import strategyImg from './assets/services/strategy.png';
 import heroBgImg from './assets/hero-bg.png';
 import heroOwlBgImg from './assets/hero_owl_mountains_backwards.png';
 import mountainValleyBgImg from './assets/mountain_valley_hero_bg_misty.png';
-import travelerOwlLeftBgImg from './assets/traveler_owl_left_mountain_valley_sunrise_hero_bg.png';
+import travelerOwlLeftBgImg from './assets/owl_red_hero.png';
+import heroChatGptImg from './assets/hero-chatgpt.png';
+import heroChatGpt2Img from './assets/hero-chatgpt-2.png';
 import solutionCreativeImg from './assets/redesign/solution_creative.png';
 import solutionTechImg from './assets/redesign/solution_tech.png';
 import solutionGrowthImg from './assets/redesign/solution_growth.png';
@@ -214,8 +216,8 @@ const ContactForm = () => {
   if (status === 'success') {
     return (
       <div className="text-center py-12">
-        <div className="w-20 h-20 bg-[#C8FF00]/20 rounded-full flex items-center justify-center mx-auto mb-8 border border-[#C8FF00]/50">
-          <Check size={40} className="text-[#C8FF00]" />
+        <div className="w-20 h-20 bg-[#FF0000]/20 rounded-full flex items-center justify-center mx-auto mb-8 border border-[#FF0000]/50">
+          <Check size={40} className="text-[#FF0000]" />
         </div>
         <h3 className="text-3xl font-medium uppercase tracking-tight mb-4">Message Sent!</h3>
         <p className="text-white/40 font-light max-w-sm mx-auto">We've received your inquiry and will get back to you within 24 hours.</p>
@@ -227,15 +229,15 @@ const ContactForm = () => {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
         <label className="text-xs font-bold uppercase tracking-widest text-white/30 px-1">Your Name</label>
-        <input required type="text" name="name" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 focus:border-[#C8FF00]/30 outline-none transition-colors text-sm" placeholder="John Doe" />
+        <input required type="text" name="name" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 focus:border-[#FF0000]/30 outline-none transition-colors text-sm" placeholder="John Doe" />
       </div>
       <div className="space-y-2">
         <label className="text-xs font-bold uppercase tracking-widest text-white/30 px-1">Email Address</label>
-        <input required type="email" name="email" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 focus:border-[#C8FF00]/30 outline-none transition-colors text-sm" placeholder="email@example.com" />
+        <input required type="email" name="email" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 focus:border-[#FF0000]/30 outline-none transition-colors text-sm" placeholder="email@example.com" />
       </div>
       <div className="space-y-2">
         <label className="text-xs font-bold uppercase tracking-widest text-white/30 px-1">Project Details</label>
-        <textarea required name="message" rows={4} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 focus:border-[#C8FF00]/30 outline-none transition-colors text-sm resize-none" placeholder="Tell us about your project..." />
+        <textarea required name="message" rows={4} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 focus:border-[#FF0000]/30 outline-none transition-colors text-sm resize-none" placeholder="Tell us about your project..." />
       </div>
       {status === 'error' && (
         <p className="text-red-400 text-xs font-medium">Something went wrong. Please try again.</p>
@@ -243,7 +245,7 @@ const ContactForm = () => {
       <button
         disabled={status === 'submitting'}
         type="submit"
-        className="w-full py-4 bg-[#C8FF00] text-black rounded-xl font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 mt-4 hover:bg-white transition-all disabled:opacity-50"
+        className="w-full py-4 bg-[#FF0000] text-black rounded-xl font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 mt-4 hover:bg-white transition-all disabled:opacity-50"
       >
         {status === 'submitting' ? "Sending..." : <>Send Message <ArrowRight size={16} /></>}
       </button>
@@ -274,8 +276,8 @@ const ContactModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
             </button>
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-3">
-                <div className="w-2 h-2 rounded-full bg-[#C8FF00] animate-pulse" />
-                <span className="text-[10px] font-bold uppercase tracking-widest text-[#C8FF00]">AVAILABLE FOR PROJECTS</span>
+                <div className="w-2 h-2 rounded-full bg-[#FF0000] animate-pulse" />
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#FF0000]">AVAILABLE FOR PROJECTS</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-medium tracking-tighter uppercase leading-none">Let's build<br />something great.</h2>
               <p className="text-sm text-white/40 mt-4 leading-relaxed">Fill out the form below and we'll get back to you within 24 hours to schedule a free strategy session.</p>
@@ -325,10 +327,10 @@ const Navbar = ({ onOpenContact }: { onOpenContact: () => void }) => {
       <div className="hidden md:flex items-center">
         <button
           onClick={onOpenContact}
-          className={`flex items-center gap-3 pl-6 pr-2 py-2 rounded-xl font-bold transition-all group overflow-hidden ${scrolled ? 'bg-black text-white hover:bg-neutral-800' : 'bg-[#C8FF00] text-black hover:bg-white'}`}
+          className={`flex items-center gap-3 pl-6 pr-2 py-2 rounded-xl font-bold transition-all group overflow-hidden ${scrolled ? 'bg-black text-white hover:bg-neutral-800' : 'bg-[#FF0000] text-black hover:bg-white'}`}
         >
           <span className="text-[13px] uppercase tracking-widest">Get in touch</span>
-          <div className={`w-8 h-8 rounded-lg flex items-center justify-center relative overflow-hidden transition-colors ${scrolled ? 'bg-white text-black' : 'bg-black text-[#C8FF00]'}`}>
+          <div className={`w-8 h-8 rounded-lg flex items-center justify-center relative overflow-hidden transition-colors ${scrolled ? 'bg-white text-black' : 'bg-black text-[#FF0000]'}`}>
             <ArrowUpRight size={16} className="absolute transition-transform duration-300 group-hover:translate-x-8 group-hover:-translate-y-8" />
             <ArrowUpRight size={16} className="absolute -translate-x-8 translate-y-8 transition-transform duration-300 group-hover:translate-x-0 group-hover:translate-y-0" />
           </div>
@@ -353,63 +355,10 @@ const Hero = ({ onOpenContact }: { onOpenContact: () => void }) => (
 
     {/* Center Content */}
     <div className="relative z-10 flex flex-col items-center max-w-6xl px-6 pointer-events-none">
-      {/* Badges */}
-      <div className="flex flex-wrap justify-center gap-3 mb-8">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="px-4 py-1.5 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-[10px] md:text-xs font-bold tracking-widest text-white uppercase"
-        >
-          SAAS & AI STARTUPS
-        </motion.div>
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="px-4 py-1.5 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-[10px] md:text-xs font-bold tracking-widest text-white uppercase"
-        >
-          DIGITAL PRODUCT DESIGN
-        </motion.div>
-      </div>
+      {/* Badges removed per request */}
 
-      {/* Main Headline */}
-      <h1 
-        className="text-white text-center leading-[0.9] md:leading-[0.85] tracking-tight mb-12 select-none flex flex-col items-center"
-        style={{ 
-          fontFamily: 'var(--font-geist)', 
-          fontSize: 'clamp(48px, 12vw, 110px)', 
-          fontWeight: 500, 
-          letterSpacing: '-0.04em',
-          textTransform: 'uppercase'
-        }}
-      >
-        <RevealText text="WEB DESIGN" delay={0.1} />
-        <RevealText text="AGENCY FOR DIGITAL" delay={0.2} />
-        <RevealText text="BUSINESSES" delay={0.3} />
-      </h1>
 
-      {/* Bottom Logos */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.8 }}
-        className="flex flex-wrap justify-center items-center gap-6 md:gap-10 mt-4 max-w-4xl"
-      >
-        {HERO_BRANDS.map((brand, i) => (
-          <div key={i} className="flex items-center gap-3">
-            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur-sm overflow-hidden shrink-0">
-               <img src={brand.image} alt={brand.name} className="w-full h-full object-cover scale-150" />
-            </div>
-            <div className="flex flex-col items-start">
-              <div className="flex items-center gap-1.5">
-                <span className="text-white font-bold text-sm tracking-tight">{brand.name}</span>
-                <span className="text-[8px] bg-[#C8FF00] text-black px-1 rounded font-black">LIVE</span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </motion.div>
+      {/* Bottom Logos removed per request */}
 
       {/* Mobile-only Get In Touch Button */}
       <motion.div 
@@ -420,16 +369,36 @@ const Hero = ({ onOpenContact }: { onOpenContact: () => void }) => (
       >
         <button
           onClick={onOpenContact}
-          className="flex items-center gap-3 pl-8 pr-2 py-3 rounded-2xl font-bold transition-all group overflow-hidden bg-[#C8FF00] text-black hover:bg-white shadow-[0_0_20px_rgba(200,255,0,0.15)]"
+          className="flex items-center gap-3 pl-8 pr-2 py-3 rounded-2xl font-bold transition-all group overflow-hidden bg-[#FF0000] text-black hover:bg-white shadow-[0_0_20px_rgba(200,255,0,0.15)]"
         >
           <span className="text-sm uppercase tracking-widest font-black">Get in touch</span>
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center relative overflow-hidden transition-colors bg-black text-[#C8FF00]">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center relative overflow-hidden transition-colors bg-black text-[#FF0000]">
             <ArrowUpRight size={20} className="absolute transition-transform duration-300 group-hover:translate-x-10 group-hover:-translate-y-10" />
             <ArrowUpRight size={20} className="absolute -translate-x-10 translate-y-10 transition-transform duration-300 group-hover:translate-x-0 group-hover:translate-y-0" />
           </div>
         </button>
       </motion.div>
     </div>
+
+    {/* Big Bottom Phrase */}
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      className="absolute bottom-12 left-0 w-full px-6 flex justify-center z-20 pointer-events-none"
+    >
+      <div 
+        className="text-white font-bold uppercase tracking-tighter leading-none select-none text-center"
+        style={{ 
+          fontFamily: 'var(--font-geist)',
+          fontSize: 'clamp(40px, 12vw, 140px)',
+          letterSpacing: '-0.06em',
+          textShadow: '0 10px 30px rgba(0,0,0,0.5)'
+        }}
+      >
+        DESIGN THAT MATTERS
+      </div>
+    </motion.div>
 
   </section>
 );
@@ -466,7 +435,7 @@ const MarqueeStrip = () => {
             <span className="text-sm font-semibold uppercase tracking-[0.15em] text-white/50">
               {point}
             </span>
-            <Asterisk className="w-4 h-4 text-[#C8FF00]" />
+            <Asterisk className="w-4 h-4 text-[#FF0000]" />
           </div>
         ))}
       </motion.div>
@@ -623,7 +592,7 @@ const SolutionsSection = () => {
             <div className="relative w-full h-full flex items-center justify-center">
               <div className="w-full h-full pointer-events-none">
                 <svg viewBox="0 0 100 100" className="w-full h-full">
-                  <circle cx="50" cy="50" r="38" fill="#C8FF00" />
+                  <circle cx="50" cy="50" r="38" fill="#FF0000" />
                   <path
                     id="circlePath"
                     d="M 50, 50 m -30, 0 a 30,30 0 1,1 60,0 a 30,30 0 1,1 -60,0"
@@ -678,10 +647,10 @@ const SolutionsSection = () => {
           >
             <Link 
               to="/about" 
-              className="inline-flex items-center gap-4 bg-[#C8FF00] rounded-2xl p-1.5 group transition-all shadow-lg shadow-[#C8FF00]/10 hover:bg-[#b0e600]"
+              className="inline-flex items-center gap-4 bg-[#FF0000] rounded-2xl p-1.5 group transition-all shadow-lg shadow-[#FF0000]/10 hover:bg-[#CC0000]"
             >
               <span className="text-black font-semibold text-base px-6 py-1.5">About us</span>
-              <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center text-[#C8FF00] relative overflow-hidden">
+              <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center text-[#FF0000] relative overflow-hidden">
                 <ArrowUpRight size={18} className="absolute transition-transform duration-300 group-hover:translate-x-10 group-hover:-translate-y-10" />
                 <ArrowUpRight size={18} className="absolute -translate-x-10 translate-y-10 transition-transform duration-300 group-hover:translate-x-0 group-hover:translate-y-0" />
               </div>
@@ -753,7 +722,7 @@ const ServicesSection = () => {
         <motion.span
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          className="text-[#C8FF00] font-bold uppercase tracking-[0.3em] text-sm block mb-4"
+          className="text-[#FF0000] font-bold uppercase tracking-[0.3em] text-sm block mb-4"
         >
           Our Expertise
         </motion.span>
@@ -770,7 +739,7 @@ const ServicesSection = () => {
           speed={15}
           textColor="#ffffff"
           bgColor="#000000"
-          marqueeBgColor="#C8FF00"
+          marqueeBgColor="#FF0000"
           marqueeTextColor="#000000"
           borderColor="rgba(255,255,255,0.1)"
         />
@@ -783,7 +752,7 @@ const ProjectsSection = () => {
   const displayedProjects = showAll ? PROJECTS : PROJECTS.slice(0, 2);
 
   return (
-    <section id="work" className="bg-[#C8FF00] py-16 md:py-24 px-6 md:px-16 overflow-hidden">
+    <section id="work" className="bg-[#FF0000] py-16 md:py-24 px-6 md:px-16 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="mb-16 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-12">
@@ -838,7 +807,7 @@ const ProjectsSection = () => {
                 />
                 <div className="absolute inset-x-0 bottom-0 p-8 md:p-12 bg-linear-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end translate-y-6 group-hover:translate-y-0 transition-transform duration-500">
                   <div className="flex items-center gap-3 mb-4">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] px-3 py-1 bg-[#C8FF00] text-black rounded-full">
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] px-3 py-1 bg-[#FF0000] text-black rounded-full">
                       {project.category}
                     </span>
                   </div>
@@ -860,7 +829,7 @@ const ProjectsSection = () => {
                     A comprehensive digital transformation focused on high-conversion UI and seamless backend integration.
                   </p>
                 </div>
-                <div className="h-10 w-10 md:h-12 md:w-12 rounded-full border border-black/10 flex items-center justify-center group-hover:bg-black group-hover:text-[#C8FF00] transition-colors">
+                <div className="h-10 w-10 md:h-12 md:w-12 rounded-full border border-black/10 flex items-center justify-center group-hover:bg-black group-hover:text-[#FF0000] transition-colors">
                   <ArrowUpRight size={24} />
                 </div>
               </div>
@@ -880,7 +849,7 @@ const ProjectsSection = () => {
                   onClick={() => setShowAll(true)}
                   className="group flex flex-col items-center gap-6"
                >
-                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border border-black/10 flex items-center justify-center transition-all group-hover:bg-black group-hover:text-[#C8FF00]">
+                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border border-black/10 flex items-center justify-center transition-all group-hover:bg-black group-hover:text-[#FF0000]">
                     <Plus size={32} />
                   </div>
                   <span className="text-sm font-bold uppercase tracking-[0.4em] text-black/40 group-hover:text-black transition-colors">VIEW ALL PROJECTS</span>
@@ -903,7 +872,7 @@ const ProjectsSection = () => {
                   }}
                   className="group flex flex-col items-center gap-6"
                >
-                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border border-black/10 flex items-center justify-center transition-all group-hover:bg-black group-hover:text-[#C8FF00]">
+                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border border-black/10 flex items-center justify-center transition-all group-hover:bg-black group-hover:text-[#FF0000]">
                     <Minus size={32} />
                   </div>
                   <span className="text-sm font-bold uppercase tracking-[0.4em] text-black/40 group-hover:text-black transition-colors">SHOW LESS</span>
@@ -950,7 +919,7 @@ const ProcessSection = () => {
               className="grid grid-cols-1 md:grid-cols-2 gap-8 py-16 border-t border-white/10 group"
             >
               <div className="flex items-baseline gap-6">
-                <span className="text-xl font-mono text-[#C8FF00] font-medium">{step.id}</span>
+                <span className="text-xl font-mono text-[#FF0000] font-medium">{step.id}</span>
                 <div>
                   <h3 className="text-4xl md:text-6xl font-medium tracking-tighter uppercase group-hover:translate-x-4 transition-transform duration-500">
                     {step.title}
@@ -1070,10 +1039,10 @@ const PricingSection = ({ onOpenContact }: { onOpenContact: () => void }) => {
 
         <button 
           onClick={onOpenContact}
-          className="flex items-center justify-center gap-3 bg-[#C8FF00] rounded-xl p-1 group transition-all shadow-md shadow-[#C8FF00]/10 w-max hover:bg-[#b0e600]"
+          className="flex items-center justify-center gap-3 bg-[#FF0000] rounded-xl p-1 group transition-all shadow-md shadow-[#FF0000]/10 w-max hover:bg-[#CC0000]"
         >
           <span className="text-black font-semibold text-sm px-5 py-1.5">Get in touch</span>
-          <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center text-[#C8FF00] relative overflow-hidden">
+          <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center text-[#FF0000] relative overflow-hidden">
             <ArrowUpRight size={14} className="absolute transition-transform duration-300 group-hover:translate-x-8 group-hover:-translate-y-8" />
             <ArrowUpRight size={14} className="absolute -translate-x-8 translate-y-8 transition-transform duration-300 group-hover:translate-x-0 group-hover:translate-y-0" />
           </div>
@@ -1112,8 +1081,8 @@ const PricingSection = ({ onOpenContact }: { onOpenContact: () => void }) => {
                 onClick={onOpenContact}
                 className={`w-full py-4 rounded-xl font-bold uppercase tracking-widest text-xs transition-all duration-500 transform hover:scale-[1.01] ${
                   plan.theme === 'dark'
-                  ? 'bg-[#C8FF00] text-black hover:bg-white'
-                  : 'bg-black text-white hover:bg-[#C8FF00] hover:text-black'
+                  ? 'bg-[#FF0000] text-black hover:bg-white'
+                  : 'bg-black text-white hover:bg-[#FF0000] hover:text-black'
                 }`}
               >
                 Inquire now
@@ -1130,7 +1099,7 @@ const PricingSection = ({ onOpenContact }: { onOpenContact: () => void }) => {
                   <div key={j} className="flex items-center gap-3">
                     <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 border ${
                       feature.included 
-                      ? 'bg-[#C8FF00] border-[#C8FF00] text-black' 
+                      ? 'bg-[#FF0000] border-[#FF0000] text-black' 
                       : 'bg-transparent border-neutral-300 text-black'
                     }`}>
                       {feature.included ? (
@@ -1191,7 +1160,7 @@ const TestimonialsSection = () => {
                   <p className="text-lg text-white/60 leading-relaxed mb-8 font-light italic">"{t.text}"</p>
                 </div>
                 <div>
-                  <div className="text-xs font-mono text-[#C8FF00] uppercase tracking-widest mb-4">{t.result}</div>
+                  <div className="text-xs font-mono text-[#FF0000] uppercase tracking-widest mb-4">{t.result}</div>
                   <div className="flex items-center gap-4">
                     <img src={t.image} alt={t.name} className="w-12 h-12 rounded-full object-cover" referrerPolicy="no-referrer" />
                     <div>
@@ -1223,7 +1192,7 @@ const TestimonialsSection = () => {
                   <p className="text-lg text-white/60 leading-relaxed mb-8 font-light italic">"{t.text}"</p>
                 </div>
                 <div>
-                  <div className="text-xs font-mono text-[#C8FF00] uppercase tracking-widest mb-4">{t.result}</div>
+                  <div className="text-xs font-mono text-[#FF0000] uppercase tracking-widest mb-4">{t.result}</div>
                   <div className="flex items-center gap-4">
                     <img src={t.image} alt={t.name} className="w-12 h-12 rounded-full object-cover" referrerPolicy="no-referrer" />
                     <div>
@@ -1375,13 +1344,10 @@ const HomePage = ({ onOpenContact }: { onOpenContact: () => void }) => (
    <>
     <Hero onOpenContact={onOpenContact} />
     <MarqueeStrip />
-    <ProjectsSection />
     <SolutionsSection />
     <AgencyStatsSection />
-    <ServicesSection />
     <DeliveryMarquee />
     <PricingSection onOpenContact={onOpenContact} />
-    <TestimonialsSection />
     <Footer />
   </>
 );
