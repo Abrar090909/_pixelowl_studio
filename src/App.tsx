@@ -304,24 +304,25 @@ const Navbar = ({ onOpenContact }: { onOpenContact: () => void }) => {
 
   return (
     <motion.nav
-      className={`fixed top-0 left-0 w-full flex justify-between items-center px-6 md:px-16 transition-all duration-500 z-9999 ${scrolled ? 'py-6 bg-black/95 backdrop-blur-md shadow-sm' : 'py-10 bg-black/20 backdrop-blur-md'}`}
+      className={`fixed top-0 left-0 w-full flex justify-between items-center px-6 md:px-16 transition-all duration-500 z-9999 ${scrolled ? 'py-3 bg-black/95 backdrop-blur-md shadow-sm' : 'py-5 bg-black/20 backdrop-blur-md'}`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
-      {/* Left - Logo */}
+      {/* Left - Logo (Desktop Only) */}
       <div 
-        className={`flex items-center cursor-pointer transition-transform duration-500 hover:scale-105`}
+        className={`hidden md:flex items-center cursor-pointer transition-transform duration-500 hover:scale-105`}
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       >
-        <img src={logoImg} alt="PixelOwl Logo" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
+        <img src={logoImg} alt="PixelOwl Logo" className="w-12 h-12 object-contain" />
       </div>
 
-      {/* Center - PIXELOWL */}
+      {/* Center - PIXELOWL (with Logo on Mobile) */}
       <div 
-        className={`absolute left-1/2 -translate-x-1/2 flex items-center cursor-pointer transition-colors duration-500 text-white`}
+        className={`absolute left-1/2 -translate-x-1/2 flex items-center gap-3 cursor-pointer transition-colors duration-500 text-white`}
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       >
+        <img src={logoImg} alt="PixelOwl Logo" className="w-8 h-8 md:hidden object-contain" />
         <span className="font-medium tracking-[0.6em] text-sm md:text-lg select-none">PIXELOWL</span>
       </div>
 
