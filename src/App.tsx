@@ -345,7 +345,7 @@ const Navbar = ({ onOpenContact }: { onOpenContact: () => void }) => {
 
 const Hero = ({ onOpenContact }: { onOpenContact: () => void }) => (
   <section
-    className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden bg-[65%_center] md:bg-center bg-cover bg-no-repeat w-full"
+    className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden bg-[55%_center] md:bg-center bg-cover bg-no-repeat w-full"
     style={{ backgroundImage: `url(${travelerOwlLeftBgImg})` }}
   >
     {/* Dark overlay for readability */}
