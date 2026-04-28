@@ -71,23 +71,26 @@ const Asterisk = ({ className }: { className?: string }) => (
 
 const RevealText = ({ text, delay = 0, className = "" }: { text: string, delay?: number, className?: string }) => {
   return (
-    <span className={`inline-flex flex-wrap ${className}`}>
+    <span className={className}>
       {text.split(" ").map((word, wordIdx) => (
-        <span key={wordIdx} className="inline-flex overflow-hidden pb-4 -mb-4 mr-[0.25em] last:mr-0 pt-2 -mt-2">
+        <span 
+          key={wordIdx} 
+          className="inline-block mr-[0.25em] last:mr-0 align-bottom"
+        >
           {word.split("").map((char, charIdx) => (
              <motion.span
                key={charIdx}
-               initial={{ y: "110%", rotateZ: 5 }}
-               whileInView={{ y: 0, rotateZ: 0 }}
+               initial={{ y: 20, opacity: 0 }}
+               whileInView={{ y: 0, opacity: 1 }}
                viewport={{ once: true, margin: "-50px" }}
                transition={{
                  duration: 0.8,
                  ease: [0.16, 1, 0.3, 1],
                  delay: delay + (wordIdx * 0.1) + (charIdx * 0.02)
                }}
-               className="origin-bottom-left inline-block"
+               className="inline-block"
              >
-               {char}
+               {char === " " ? "\u00A0" : char}
              </motion.span>
           ))}
         </span>
@@ -342,7 +345,7 @@ const Navbar = ({ onOpenContact }: { onOpenContact: () => void }) => {
 
 const Hero = ({ onOpenContact }: { onOpenContact: () => void }) => (
   <section
-    className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden bg-[position:20%_center] md:bg-center bg-cover bg-no-repeat w-full"
+    className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden bg-center bg-cover bg-no-repeat w-full"
     style={{ backgroundImage: `url(${travelerOwlLeftBgImg})` }}
   >
     {/* Dark overlay for readability */}
@@ -359,33 +362,14 @@ const Hero = ({ onOpenContact }: { onOpenContact: () => void }) => (
 
 
       {/* Bottom Logos removed per request */}
-
-      {/* Mobile-only Get In Touch Button */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.9 }}
-        className="mt-10 md:hidden flex justify-center w-full pointer-events-auto shrink-0"
-      >
-        <button
-          onClick={onOpenContact}
-          className="flex items-center gap-3 pl-8 pr-2 py-3 rounded-2xl font-bold transition-all group overflow-hidden bg-[#FF0000] text-black hover:bg-white shadow-[0_0_20px_rgba(200,255,0,0.15)]"
-        >
-          <span className="text-sm uppercase tracking-widest font-black">Get in touch</span>
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center relative overflow-hidden transition-colors bg-black text-[#FF0000]">
-            <ArrowUpRight size={20} className="absolute transition-transform duration-300 group-hover:translate-x-10 group-hover:-translate-y-10" />
-            <ArrowUpRight size={20} className="absolute -translate-x-10 translate-y-10 transition-transform duration-300 group-hover:translate-x-0 group-hover:translate-y-0" />
-          </div>
-        </button>
-      </motion.div>
     </div>
 
-    {/* Big Bottom Phrase */}
+    {/* Big Bottom Phrase & Mobile Button */}
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="absolute bottom-12 left-0 w-full px-6 flex justify-center z-20 pointer-events-none"
+      className="absolute bottom-10 md:bottom-12 left-0 w-full px-6 flex flex-col items-center justify-center z-20 pointer-events-none"
     >
       <div 
         className="text-white font-bold uppercase tracking-tighter leading-none select-none text-center"
@@ -397,6 +381,20 @@ const Hero = ({ onOpenContact }: { onOpenContact: () => void }) => (
         }}
       >
         DESIGN THAT MATTERS
+      </div>
+
+      {/* Mobile-only Get In Touch Button */}
+      <div className="mt-8 md:hidden flex justify-center w-full pointer-events-auto shrink-0">
+        <button
+          onClick={onOpenContact}
+          className="flex items-center gap-3 pl-8 pr-2 py-3 rounded-2xl font-bold transition-all group overflow-hidden bg-[#FF0000] text-black hover:bg-white shadow-[0_0_20px_rgba(255,0,0,0.3)]"
+        >
+          <span className="text-sm uppercase tracking-widest font-black">Get in touch</span>
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center relative overflow-hidden transition-colors bg-black text-[#FF0000]">
+            <ArrowUpRight size={20} className="absolute transition-transform duration-300 group-hover:translate-x-10 group-hover:-translate-y-10" />
+            <ArrowUpRight size={20} className="absolute -translate-x-10 translate-y-10 transition-transform duration-300 group-hover:translate-x-0 group-hover:translate-y-0" />
+          </div>
+        </button>
       </div>
     </motion.div>
 
@@ -492,8 +490,8 @@ const SolutionsSection = () => {
     <section className="bg-white py-24 md:py-32 px-6 md:px-16">
       <div className="max-w-7xl mx-auto text-center mb-20">
         <span className="text-sm font-semibold uppercase tracking-[0.2em] text-black font-bold">Our Services</span>
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight text-black mt-4 leading-tight flex flex-col items-center">
-          <RevealText text="Customized digital strategies" delay={0.1} />
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight text-black mt-4 leading-tight">
+          <RevealText text="Customized digital strategies " delay={0.1} />
           <RevealText text="that fit your needs" delay={0.2} />
         </h2>
         <p className="text-black mt-6 max-w-2xl mx-auto text-lg leading-relaxed font-medium">
@@ -1027,10 +1025,10 @@ const PricingSection = ({ onOpenContact }: { onOpenContact: () => void }) => {
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-black">BEST PRICING PLANS</span>
         </div>
         
-        <h2 className="text-4xl md:text-5xl lg:text-5xl font-semibold tracking-tight text-black leading-tight mb-8 flex flex-col items-start">
-          <RevealText text="Flexible" />
-          <RevealText text="best pricing" delay={0.2} />
-          <RevealText text="plans for you" delay={0.4} />
+        <h2 className="text-4xl md:text-5xl lg:text-5xl font-semibold tracking-tight text-black leading-tight mb-8">
+          <RevealText text="Flexible " className="block" />
+          <RevealText text="best pricing " delay={0.2} className="block" />
+          <RevealText text="plans for you" delay={0.4} className="block" />
         </h2>
         
         <p className="text-base text-black font-medium leading-relaxed mb-10 max-w-sm">
