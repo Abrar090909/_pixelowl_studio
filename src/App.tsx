@@ -372,15 +372,29 @@ const Hero = ({ onOpenContact }: { onOpenContact: () => void }) => (
       className="absolute bottom-24 md:bottom-20 left-0 w-full px-6 flex flex-col items-center justify-center z-20 pointer-events-none"
     >
       <div 
-        className="text-white font-bold uppercase tracking-tighter leading-none select-none text-center"
+        className="text-white font-bold tracking-tighter leading-none select-none text-center flex flex-wrap justify-center gap-x-4 md:gap-x-8 items-center"
         style={{ 
           fontFamily: 'var(--font-geist)',
           fontSize: 'clamp(40px, 12vw, 140px)',
-          letterSpacing: '-0.06em',
           textShadow: '0 10px 30px rgba(0,0,0,0.5)'
         }}
       >
-        WEBSITES THAT MATTER
+        <span className="uppercase" style={{ letterSpacing: '-0.06em' }}>WEBSITES</span>
+        <span className="uppercase" style={{ letterSpacing: '-0.06em' }}>THAT</span>
+        <motion.span
+          initial={{ opacity: 0, scale: 0.5, rotate: -15 }}
+          animate={{ opacity: 1, scale: 1, rotate: -5 }}
+          transition={{ duration: 1.2, delay: 1, type: "spring", bounce: 0.5 }}
+          style={{ 
+            fontFamily: 'var(--font-cursive)', 
+            color: '#FF0000',
+            letterSpacing: '0',
+            display: 'inline-block',
+            paddingBottom: '0.1em'
+          }}
+        >
+          Matter
+        </motion.span>
       </div>
 
       {/* Mobile-only Get In Touch Button */}
