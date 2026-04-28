@@ -372,10 +372,10 @@ const Hero = ({ onOpenContact }: { onOpenContact: () => void }) => (
       className="absolute bottom-24 md:bottom-20 left-0 w-full px-6 flex flex-col items-center justify-center z-20 pointer-events-none"
     >
       <div 
-        className="text-white font-bold uppercase tracking-tighter leading-none select-none text-center"
+        className="text-white font-bold uppercase tracking-tighter leading-none select-none text-center whitespace-nowrap"
         style={{ 
           fontFamily: 'var(--font-geist)',
-          fontSize: 'clamp(40px, 12vw, 140px)',
+          fontSize: 'clamp(28px, 9vw, 120px)',
           letterSpacing: '-0.06em',
           textShadow: '0 10px 30px rgba(0,0,0,0.5)',
           fontVariantLigatures: 'none'
