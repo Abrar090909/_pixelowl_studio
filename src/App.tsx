@@ -345,7 +345,7 @@ const Navbar = ({ onOpenContact }: { onOpenContact: () => void }) => {
 
 const Hero = ({ onOpenContact }: { onOpenContact: () => void }) => (
   <section
-    className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden bg-center bg-cover bg-no-repeat w-full"
+    className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden bg-[65%_center] md:bg-center bg-cover bg-no-repeat w-full"
     style={{ backgroundImage: `url(${travelerOwlLeftBgImg})` }}
   >
     {/* Dark overlay for readability */}
@@ -369,7 +369,7 @@ const Hero = ({ onOpenContact }: { onOpenContact: () => void }) => (
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="absolute bottom-10 md:bottom-12 left-0 w-full px-6 flex flex-col items-center justify-center z-20 pointer-events-none"
+      className="absolute bottom-24 md:bottom-20 left-0 w-full px-6 flex flex-col items-center justify-center z-20 pointer-events-none"
     >
       <div 
         className="text-white font-bold uppercase tracking-tighter leading-none select-none text-center"
@@ -380,7 +380,7 @@ const Hero = ({ onOpenContact }: { onOpenContact: () => void }) => (
           textShadow: '0 10px 30px rgba(0,0,0,0.5)'
         }}
       >
-        DESIGN THAT MATTERS
+        WEBSITES THAT MATTER
       </div>
 
       {/* Mobile-only Get In Touch Button */}
