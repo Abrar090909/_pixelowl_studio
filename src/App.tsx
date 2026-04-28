@@ -304,7 +304,7 @@ const Navbar = ({ onOpenContact }: { onOpenContact: () => void }) => {
 
   return (
     <motion.nav
-      className={`fixed top-0 left-0 w-full flex justify-between items-center px-6 md:px-16 transition-all duration-500 z-9999 ${scrolled ? 'py-3 bg-black/95 backdrop-blur-md shadow-sm' : 'py-5 bg-black/20 backdrop-blur-md'}`}
+      className={`fixed top-0 left-0 w-full flex justify-between items-center px-6 md:px-16 transition-all duration-500 z-9999 ${scrolled ? 'py-5 md:py-3 bg-black/95 backdrop-blur-md shadow-sm' : 'py-7 md:py-5 bg-black/20 backdrop-blur-md'}`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -322,7 +322,7 @@ const Navbar = ({ onOpenContact }: { onOpenContact: () => void }) => {
         className={`absolute left-1/2 -translate-x-1/2 flex items-center gap-3 cursor-pointer transition-colors duration-500 text-white`}
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       >
-        <img src={logoImg} alt="PixelOwl Logo" className="w-8 h-8 md:hidden object-contain" />
+        <img src={logoImg} alt="PixelOwl Logo" className="w-10 h-10 md:hidden object-contain" />
         <span className="font-medium tracking-[0.6em] text-sm md:text-lg select-none">PIXELOWL</span>
       </div>
 
