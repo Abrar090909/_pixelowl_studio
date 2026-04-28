@@ -309,21 +309,19 @@ const Navbar = ({ onOpenContact }: { onOpenContact: () => void }) => {
       animate={{ y: 0 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
-      {/* Left - See Projects */}
+      {/* Left - Logo */}
       <div 
-        className={`hidden md:flex flex-col items-start cursor-pointer transition-colors duration-500 text-white`}
-        onClick={() => document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })}
+        className={`flex items-center cursor-pointer transition-transform duration-500 hover:scale-105`}
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       >
-        <span className="text-sm font-semibold tracking-tight uppercase">See projects</span>
-        <span className="text-[10px] uppercase tracking-widest font-bold opacity-50 text-white/60">Portfolio</span>
+        <img src={logoImg} alt="PixelOwl Logo" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
       </div>
 
       {/* Center - PIXELOWL */}
       <div 
-        className={`absolute left-1/2 -translate-x-1/2 flex items-center gap-4 cursor-pointer transition-colors duration-500 text-white`}
+        className={`absolute left-1/2 -translate-x-1/2 flex items-center cursor-pointer transition-colors duration-500 text-white`}
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       >
-        <img src={logoImg} alt="PixelOwl Logo" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
         <span className="font-medium tracking-[0.6em] text-sm md:text-lg select-none">PIXELOWL</span>
       </div>
 
