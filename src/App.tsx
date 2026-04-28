@@ -31,7 +31,7 @@ import orvionImg from './assets/work/orvion.png';
 import nexisImg from './assets/work/nexis.png';
 import toolinoImg from './assets/work/toolino.png';
 import aboutStudioImg from './assets/about_studio.png';
-import logoImg from './assets/logo.jpg';
+import logoImg from './assets/logo.png';
 import uiUxImg from './assets/services/ui_ux.png';
 import webDevImg from './assets/services/web_dev.png';
 import brandingImg from './assets/services/branding.png';
@@ -304,36 +304,37 @@ const Navbar = ({ onOpenContact }: { onOpenContact: () => void }) => {
 
   return (
     <motion.nav
-      className={`fixed top-0 left-0 w-full flex justify-between items-center px-6 md:px-16 transition-all duration-500 z-9999 ${scrolled ? 'py-4 bg-white/95 backdrop-blur-md shadow-sm' : 'py-8 bg-transparent'}`}
+      className={`fixed top-0 left-0 w-full flex justify-between items-center px-6 md:px-16 transition-all duration-500 z-9999 ${scrolled ? 'py-6 bg-black/95 backdrop-blur-md shadow-sm border-b border-white/10' : 'py-10 bg-transparent'}`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
       {/* Left - See Projects */}
       <div 
-        className={`hidden md:flex flex-col items-start cursor-pointer transition-colors duration-500 ${scrolled ? 'text-black' : 'text-white'}`}
+        className={`hidden md:flex flex-col items-start cursor-pointer transition-colors duration-500 text-white`}
         onClick={() => document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })}
       >
         <span className="text-sm font-semibold tracking-tight uppercase">See projects</span>
-        <span className={`text-[10px] uppercase tracking-widest font-bold opacity-50 ${scrolled ? 'text-black/60' : 'text-white/60'}`}>Portfolio</span>
+        <span className="text-[10px] uppercase tracking-widest font-bold opacity-50 text-white/60">Portfolio</span>
       </div>
 
       {/* Center - PIXELOWL */}
       <div 
-        className={`absolute left-1/2 -translate-x-1/2 font-medium tracking-[0.6em] text-sm md:text-lg select-none cursor-pointer transition-colors duration-500 ${scrolled ? 'text-black' : 'text-white'}`}
+        className={`absolute left-1/2 -translate-x-1/2 flex items-center gap-4 cursor-pointer transition-colors duration-500 text-white`}
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       >
-        PIXELOWL
+        <img src={logoImg} alt="PixelOwl Logo" className="w-8 h-8 md:w-10 md:h-10 object-contain" />
+        <span className="font-medium tracking-[0.6em] text-sm md:text-lg select-none">PIXELOWL</span>
       </div>
 
       {/* Right - Get in touch */}
       <div className="hidden md:flex items-center">
         <button
           onClick={onOpenContact}
-          className={`flex items-center gap-3 pl-6 pr-2 py-2 rounded-xl font-bold transition-all group overflow-hidden ${scrolled ? 'bg-black text-white hover:bg-neutral-800' : 'bg-[#FF0000] text-black hover:bg-white'}`}
+          className={`flex items-center gap-3 pl-6 pr-2 py-2 rounded-xl font-bold transition-all group overflow-hidden ${scrolled ? 'bg-[#FF0000] text-white hover:bg-[#CC0000]' : 'bg-[#FF0000] text-black hover:bg-white'}`}
         >
           <span className="text-[13px] uppercase tracking-widest">Get in touch</span>
-          <div className={`w-8 h-8 rounded-lg flex items-center justify-center relative overflow-hidden transition-colors ${scrolled ? 'bg-white text-black' : 'bg-black text-[#FF0000]'}`}>
+          <div className={`w-8 h-8 rounded-lg flex items-center justify-center relative overflow-hidden transition-colors ${scrolled ? 'bg-black text-[#FF0000]' : 'bg-black text-[#FF0000]'}`}>
             <ArrowUpRight size={16} className="absolute transition-transform duration-300 group-hover:translate-x-8 group-hover:-translate-y-8" />
             <ArrowUpRight size={16} className="absolute -translate-x-8 translate-y-8 transition-transform duration-300 group-hover:translate-x-0 group-hover:translate-y-0" />
           </div>
