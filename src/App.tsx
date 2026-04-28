@@ -82,7 +82,7 @@ const RevealText = ({ text, delay = 0, className = "" }: { text: string, delay?:
                key={charIdx}
                initial={{ y: 20, opacity: 0 }}
                whileInView={{ y: 0, opacity: 1 }}
-               viewport={{ once: true, margin: "-50px" }}
+               viewport={{ once: true, margin: "0px 0px -50px 0px" }}
                transition={{
                  duration: 0.8,
                  ease: [0.16, 1, 0.3, 1],
