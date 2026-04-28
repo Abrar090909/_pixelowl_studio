@@ -381,7 +381,7 @@ const Hero = ({ onOpenContact }: { onOpenContact: () => void }) => (
           fontVariantLigatures: 'none'
         }}
       >
-        WEBSITES THAT MAT<span className="inline-block w-[0.1em] md:w-0"></span>TER
+        WEBSITES THAT MA<span className="mr-[0.05em] md:mr-0">T</span>TER
       </div>
 
       {/* Mobile-only Get In Touch Button */}
